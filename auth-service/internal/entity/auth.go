@@ -1,5 +1,4 @@
-package entities
-
+package entity
 type UserModel struct {
 	ID       string
 	Email    string
