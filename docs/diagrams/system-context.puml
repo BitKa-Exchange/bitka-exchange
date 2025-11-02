@@ -1,0 +1,29 @@
+@startuml system context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include FONTAWESOME/users.puml
+
+title System Context v0.2
+
+Person(user, "User")
+Person(auditor, "Auditor")
+
+System(ledgerHub, "LedgerHub")
+
+SystemDb_Ext(blockchain, "Kub Chain", "Bitkub's blockchain","Blockchain", "Blockchain")
+System_Ext(email, "SendGrid", "Email API provider","Software as a Service")
+System_Ext(r2, "Cloudflare R2", "Object Storage for file types data ex. user profile, reconcile report, and back-up","Storage as a Service")
+
+Rel(user, ledgerHub, "Deposit / Withdraw / Internal transfer")
+Rel(ledgerHub, email, "Send email")
+Rel(email, user, "Send email")
+Rel(ledgerHub, blockchain, "Read from / Make withdrawal","EVM calls")
+Rel(ledgerHub, r2, "CRUD")
+
+Rel(auditor, ledgerHub, "Audit")
+
+
+SHOW_LEGEND()
+@enduml
