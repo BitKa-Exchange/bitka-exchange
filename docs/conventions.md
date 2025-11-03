@@ -55,20 +55,6 @@ This document outlines the conventions used in the Digital Bank project for Git 
   Closes #42
   ```
 
-## Package Naming Conventions
-
-- Use lowercase letters for package names.
-- Use descriptive names that reflect the package's purpose (e.g., `http`, `middleware`, `usecases`, `jwt`, `model`).
-- Avoid using underscores or mixed case in package names.
-- Ensure package names are singular (e.g., `handler` instead of `handlers`).
-- Align package names with their directory structure for clarity.
-- Example package names:
-  - `http`: For HTTP handlers and related code.
-  - `middleware`: For HTTP middleware components.
-  - `usecase`: For business logic and use case implementations.
-  - `jwt`: For JWT-related functionality.
-  - `model`: For data models and entities.
-
 ## Diagram Conventions
 
 - Use PlantUML for creating diagrams.
