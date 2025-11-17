@@ -3,9 +3,10 @@ package http
 import (
 	"context"
 
-	"github.com/gofiber/fiber/v2"
 	"bitka/auth-service/internal/entities/dto"
 	"bitka/auth-service/internal/usecases"
+
+	fiber "github.com/gofiber/fiber/v2"
 )
 
 type Handler struct {

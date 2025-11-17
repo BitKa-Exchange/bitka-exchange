@@ -6,9 +6,10 @@ import (
 
 	"bitka/auth-service/internal/adapters/db"
 	"bitka/auth-service/internal/entities"
+	"bitka/auth-service/pkg/passhash"
 	errs "bitka/common"
 	"bitka/jwt"
-	"bitka/auth-service/pkg/passhash"
+
 	"github.com/rs/zerolog"
 )
 

@@ -4,8 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
 	"bitka/jwt"
+
+	fiber "github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog"
 )
 

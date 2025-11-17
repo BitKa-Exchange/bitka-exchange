@@ -4,9 +4,10 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/gofiber/fiber/v2"
 	errs "bitka/common"
-	"github.com/rs/zerolog"
+
+	fiber "github.com/gofiber/fiber/v2"
+	zerolog "github.com/rs/zerolog"
 )
 
 type APIErrorResp struct {
