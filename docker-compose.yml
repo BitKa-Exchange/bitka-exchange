@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: bitka-postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${AUTH_DB_NAME} # Default DB
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bitka-net
+
+  auth-service:
+    container_name: bitka-auth
+    build:
+      context: .
+      dockerfile: services/auth/Dockerfile
+    ports:
+      - "${AUTH_PORT}:${AUTH_PORT}"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      DB_HOST: postgres
+      # Map specific name to generic name expected by Go App
+      DB_NAME: ${AUTH_DB_NAME} 
+    depends_on:
+      - postgres
+    networks:
+      - bitka-net
+
+  account-service:
+    container_name: bitka-account
+    build:
+      context: .
+      dockerfile: services/account/Dockerfile
+    ports:
+      - "${ACCOUNT_PORT}:${ACCOUNT_PORT}"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      DB_HOST: postgres
+      # Map specific name to generic name
+      DB_NAME: ${ACCOUNT_DB_NAME}
+      HTTP_PORT: ${ACCOUNT_PORT}
+      # Docker internal networking
+      AUTH_JWKS_URL: http://auth-service:${AUTH_PORT}/.well-known/jwks.json
+    depends_on:
+      - postgres
+      - auth-service
+    networks:
+      - bitka-net
+
+volumes:
+  postgres_data:
+
+networks:
+  bitka-net:
+    driver: bridge

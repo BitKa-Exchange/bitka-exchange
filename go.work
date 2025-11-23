@@ -1,11 +1,8 @@
 go 1.24.1
 
 use (
-	./services/auth
 
-	./libs/common
-	./libs/config
-	./libs/db
-	./libs/jwt
-	./libs/logger
+	./pkg
+	./services/account
+	./services/auth
 )

@@ -1,4 +1,4 @@
-module bitka/auth-service
+module bitka/services/auth
 
 go 1.24.1
 

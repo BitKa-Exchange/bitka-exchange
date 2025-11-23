@@ -41,7 +41,7 @@ bitka/
 │   │   └── jwt.go              # common JWT utilities
 │   │
 │   ├── db/
-│   │   ├── go.mod              # module bitka/db
+│   │   ├── go.mod              # module bitka/database
 │   │   └── postgres.go         # pgx connection + helpers
 │   │
 │   ├── config/
