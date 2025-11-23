@@ -6,6 +6,18 @@ This document outlines the conventions used in the Digital Bank project for Git 
 
 ### Branching Conventions
 
+#### During initial development phase:
+
+- In the early stages of the development, the project would change repidly due to frequent requirement changes and as the developer knowledge/experience growth. Therefore, we will use a simpler branching strategy:
+  - `main`: The main production branch.
+  - `develop`: The main development branch where all features are integrated.
+  - `feature/<service>/<short-description>`: Feature branches for new features (e.g., `feature/jwt-auth`).
+  - `bugfix/<service>/<short-description>`: Bugfix branches for fixing bugs (e.g., `bugfix/token-expiry`).
+  - `hotfix/<service>/<short-description>`: Hotfix branches for urgent fixes in production (e.g., `hotfix/login-issue`).
+  - `release/<version>`: Release branches for preparing new versions (e.g., `release/v1.2.0`).
+
+#### After the project is stable we may use a more advanced branching strategy:
+
 - Use the following branch naming conventions:
   - `main`: The main production branch.
   - `<service>-main`: The main branch for each microservice (e.g., `auth-service-main`).
