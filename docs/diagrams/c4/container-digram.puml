@@ -1,0 +1,79 @@
+@startuml container-diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
+
+title BitKa — Container Diagram v0.3 (exclude deposit/withdraw services)
+
+Person(user, "User", "Mobile / Web user")
+
+Container_Boundary(system_boundary, "BitKa"){
+
+  Container(userUI,"User UI","Flutter App/Web", "App for traders to interact with the exchange")
+
+  Container(auth, "Authentication Service","Golang Fiber - Microservice","Handle login, register, password, OAuth2, issue RS256 JWT & JWKS")
+  Container(account, "Account Service","Golang Fiber - Microservice","User profile, contact, preferences")
+  Container(ledger, "Ledger Service","Golang Fiber - Microservice","Authoritative balances, reservations, double-entry ledger")
+  ' Container(deposit, "Deposit Service","Golang Fiber - Microservice","Generate deposit addresses, map address→user, accept provider notifications")
+  ' Container(withdraw, "Withdraw Service","Golang Fiber - Microservice","Accept withdraw requests, create/track withdraw jobs, interface to signer/provider")
+  Container(order, "Order Service","Golang Fiber - Microservice","Order management: accept/cancel orders, persist orders")
+  Container(matcher, "Matching Engine","Golang Fiber - Microservice","In-memory order book per market, match orders, emit trades")
+  Container(marketdata, "Market Data Service","Golang Fiber - Microservice","Serve orderbook, trades, ticker via REST/WS (Centrifugo the in future)")
+  Container(notification, "Notification Service","Golang Fiber - Microservice","Subscribe to events and notify users (email / in-app)")
+
+  ContainerDb(db, "Database","PostgreSQL","Single PostgreSQL instance — store service data (use database per service: auth, account, ledger, deposit, withdraw, order)")
+
+  Container(kafka,"Distributed Event Streaming","Apache Kafka (single-node)","Event-driven communication between microservices (topics: auth.*, deposit.*, withdraw.*, order.*, trade.*, ledger.*)")
+
+}
+
+' ContainerDb_Ext(blockchain, "Blockchain Provider", "3rd-party blockchain API","Third-party blockchain API / explorer (notify / verify / broadcast TXs)")
+Container_Ext(email, "Mailgun", "Software as a Service","Email API provider for notifications")
+Container_Ext(r2, "Cloudflare R2 / GCS", "Object Storage as a Service","Store avatars, token icons, static files")
+
+' User interactions
+Rel(user, userUI, "Uses", "HTTPS / WebSocket")
+Rel(userUI, auth, "Authenticate / obtain token", "REST/HTTPS")
+Rel(userUI, account, "Manage profile", "REST/HTTPS")
+Rel(userUI, ledger, "View balance / internal transfer", "REST/HTTPS")
+' Rel_U(userUI, deposit, "Request deposit address", "REST/HTTPS")
+' Rel_U(userUI, withdraw, "Request withdrawal", "REST/HTTPS")
+Rel(userUI, marketdata, "Fetch orderbook, chart data", "REST/HTTPS / WS")
+Rel(userUI, order, "Place / cancel orders", "REST/HTTPS")
+
+' Service interactions
+Rel(auth, kafka, "Publish auth.* events", "Kafka topic")
+Rel(account, kafka, "Publish account.* events", "Kafka topic")
+Rel(ledger, kafka, "Publish ledger.* events", "Kafka topic")
+' Rel(deposit, kafka, "Publish deposit.* events", "Kafka topic")
+' Rel(withdraw, kafka, "Publish withdraw.* events", "Kafka topic")
+Rel(order, kafka, "Publish order.* events", "Kafka topic")
+Rel(matcher, kafka, "Publish trade.* events", "Kafka topic")
+Rel(notification, kafka, "Subscribe to events; publish notifications", "Kafka topic")
+Rel(marketdata, kafka, "Subscribe to trade.* events", "Kafka topic")
+Rel(matcher, kafka, "Subscribe to order.* events", "Kafka topic")
+
+Rel(marketdata, matcher, "Fetch orderbook", "gRPC")
+Rel(order, ledger, "Reserve funds on order", "gRPC")
+' Rel(deposit, ledger, "Credit user on confirmed deposit", "RPC / event")
+' Rel(withdraw, ledger, "Create reservation & commit on broadcast/confirm", "RPC / event")
+
+' Data persistence
+Rel(ledger, db, "Reads/Writes ledger entries", "SQL")
+Rel(account, db, "Reads/Writes user profile", "SQL")
+Rel(order, db, "Reads/Writes orders & trades", "SQL")
+' Rel(deposit, db, "Persist addresses & deposit metadata", "SQL")
+' Rel(withdraw, db, "Persist withdraw requests & status", "SQL")
+
+' External integrations
+' Rel(deposit, blockchain, "Verify deposit / fetch tx details", "HTTP API / Webhook")
+' Rel(withdraw, blockchain, "Broadcast signed transactions", "HTTP API")
+Rel(notification, email, "Send outgoing emails", "REST/HTTPS")
+Rel(userUI, r2, "Fetch avatars / token icons", "HTTP/HTTPS")
+
+SHOW_LEGEND()
+
+footer All services are verify JWT tokens by fetching public key through JWKS endpoint from Authentication Service
+
+@enduml

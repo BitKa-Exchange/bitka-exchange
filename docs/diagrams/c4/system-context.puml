@@ -1,4 +1,4 @@
-@startuml system context
+@startuml system-context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
@@ -10,7 +10,7 @@ title System Context v0.2
 Person(user, "User")
 Person(auditor, "Auditor")
 
-System(ledgerHub, "LedgerHub")
+System(ledgerHub, "BitKa")
 
 SystemDb_Ext(blockchain, "Kub Chain", "Bitkub's blockchain","Blockchain", "Blockchain")
 System_Ext(email, "SendGrid", "Email API provider","Software as a Service")

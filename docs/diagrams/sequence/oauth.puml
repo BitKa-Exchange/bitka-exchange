@@ -1,0 +1,64 @@
+@startuml oauth-sequence
+title Bitka v0.3: OAuth Login and Access Resource Sequence (Password Grant)
+
+participant "Resource Server" as RS
+participant "Frontend" as FE
+participant "Auth Service" as AUTH
+database "PostgreSQL" as DB
+
+activate FE
+
+group Login Process
+
+  FE -> AUTH: 1. POST /login (body: userneme/email, password)
+
+  activate AUTH
+
+  AUTH -> DB: 2. Query: SELECT username, email, hashed_password, roles
+
+  activate DB
+  DB --> AUTH: 3. Return: username, email, hashed_password, roles
+  deactivate DB
+
+  AUTH -> AUTH: 4. Self-Message: Validate username/email & hashed password
+
+  alt Successful Validation
+    AUTH -> AUTH: 5. Self-Message: Generate JWT (Access & Refresh Tokens)
+    AUTH --> FE: 6. Return: Access & Refresh Tokens
+  else Failure
+    AUTH --> FE: 6. Return: 401 Unauthorized
+  end
+
+  deactivate AUTH
+
+  FE -> FE: 7. Store Tokens (Local Storage/Cookies)
+
+end
+
+group Access Protected Resource
+
+  FE -> RS: 8. Request Protected Resource (with Access Token)
+  activate RS
+
+  alt Exist kid
+    RS -> RS: 9. Self-Message: Use cached public key
+  else Missing kid
+    RS -> AUTH: 9. GET /.well-known/jwks.json
+    activate AUTH
+    AUTH --> RS: 9. Return: JWKS
+    deactivate AUTH
+    RS -> RS: 9. Self-Message: Cache public key from JWKS
+  end
+
+  RS -> RS: 10. Self-Message: Validate Access Token (signature, expiry, scopes)
+
+  alt Valid Token
+    RS --> FE: 11. Return: Protected Resource
+  else Invalid Token
+    RS --> FE: 11. Return: 401 Unauthorized
+  end
+
+  deactivate FE
+
+end
+@enduml

@@ -1,0 +1,62 @@
+@startuml place-order-sequence
+title Bitka: Place Order & Matching Sequence
+
+' TODO: complete this diagram
+
+' actor Trader as T
+' participant "Frontend/API" as FE
+' boundary "API Gateway (Traefik)" as GW
+' participant "Trading Service" as TRADING
+' participant "Ledger Service" as LEDGER
+' queue "Kafka Event Bus" as KAFKA
+' participant "Matching Engine" as MATCHING
+' participant "Notification Service" as NOTIFY
+
+' T -> FE: 1. Submit Limit Order (Market, Price, Qty)
+' FE -> GW: 2. POST /v1/orders
+
+' activate GW
+' GW -> TRADING: 3. Synchronous Call: NewOrder(User ID, Qty,...)
+' deactivate GW
+' activate TRADING
+
+'     ' === Step A: Fund Reservation (Sync) ===
+'     TRADING -> LEDGER: 4. Synchronous Call: ReserveFunds(User ID, Asset, Amount)
+'     activate LEDGER
+'     LEDGER --> TRADING: 5. Return: Reservation OK (Pre-Debit Lock)
+'     deactivate LEDGER
+
+'     ' === Step B: Order Submission (Async/Decoupled) ===
+'     TRADING -> KAFKA: 6. Asynchronous Message: Publish OrderCreated Event
+'     note right: <<OrderCreated>>
+'     TRADING --> GW: 7. Return: 202 Accepted, Order ID
+' deactivate TRADING
+
+' activate GW
+' GW --> FE: 8. Return: Order ID
+' deactivate GW
+
+' ' === Step C: Matching and Result Propagation (Asynchronous) ===
+' KAFKA -> MATCHING: 9. Consume OrderCreated Event
+' activate MATCHING
+'     MATCHING -> MATCHING: 10. Self-Message: Execute Matching Logic (In-Memory)
+
+'     MATCHING -> KAFKA: 11. Asynchronous Message: Publish TradeExecuted Event
+'     note right: <<TradeExecuted>> (Contains: Fill Price, Qty, Fees, IDs)
+' deactivate MATCHING
+
+' ' --- Fan-Out of TradeExecuted Event ---
+' par **Update Balances (Ledger)**
+'     KAFKA -> LEDGER: 12a. Consume TradeExecuted Event
+'     activate LEDGER
+'     LEDGER -> LEDGER: 13a. Self-Message: Debit Reserved, Credit Received
+'     LEDGER --> KAFKA: 14a. (Optional: Publish BalanceUpdated)
+'     deactivate LEDGER
+' par **Notify User (Notification)**
+'     KAFKA -> NOTIFY: 12b. Consume TradeExecuted Event
+'     activate NOTIFY
+'     NOTIFY -> NOTIFY: 13b. Send Email/In-App Notification ("Order Filled")
+'     deactivate NOTIFY
+' end
+
+@enduml
