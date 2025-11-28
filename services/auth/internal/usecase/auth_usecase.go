@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"bitka/services/auth/internal/domain"
-
+	"golang.org/x/crypto/bcrypt"
 	"github.com/google/uuid"
 )
 
@@ -18,14 +18,24 @@ func NewAuthUsecase(repo domain.AuthRepository, tg domain.TokenGenerator) domain
 	return &authUsecase{repo: repo, tokenGen: tg}
 }
 
+func hashPassword(password string) (string, error) {
+    bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+    return string(bytes), err
+}
+
+func checkPassword(password, hash string) bool {
+    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
+}
+
 func (u *authUsecase) Login(email, password string) (*domain.TokenPair, error) {
-	user, err := u.repo.FindByEmail(email)
+	user, err := u.repo.FindByEmailOrUser(email)
 	if err != nil {
 		return nil, errors.New("invalid credentials")
 	}
 
 	// In real app: bcrypt.CompareHashAndPassword
-	if user.PasswordHash != password {
+	if !checkPassword(password, user.PasswordHash)  {
 		return nil, errors.New("invalid credentials")
 	}
 
@@ -56,12 +66,16 @@ func (u *authUsecase) Login(email, password string) (*domain.TokenPair, error) {
 	return &domain.TokenPair{AccessToken: access, RefreshToken: refresh}, nil
 }
 
-func (u *authUsecase) Register(email, password string) error {
-	// In real app: Hash password
+func (u *authUsecase) Register(email, password, username string) error {
+	hash_password, err := hashPassword(password)
+	if err != nil {
+		return err
+	}
 	user := &domain.User{
 		ID:           uuid.New(),
 		Email:        email,
-		PasswordHash: password, // TODO: Hash this!
+		Username:	  username,
+		PasswordHash: hash_password, // TODO: Hash this!
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}

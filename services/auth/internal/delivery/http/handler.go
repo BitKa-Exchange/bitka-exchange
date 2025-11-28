@@ -4,7 +4,6 @@ import (
 	"bitka/pkg/response"
 	"bitka/services/auth/internal/delivery/http/dto"
 	"bitka/services/auth/internal/domain"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -16,13 +15,15 @@ func NewAuthHandler(uc domain.AuthUsecase) *AuthHandler {
 	return &AuthHandler{uc: uc}
 }
 
+
+
 func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	var req dto.LoginRequest
 	if err := c.BodyParser(&req); err != nil {
 		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
-	tokens, err := h.uc.Login(req.Email, req.Password)
+	tokens, err := h.uc.Login(req.Identifier, req.Password)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, err.Error())
 	}
@@ -34,12 +35,12 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 }
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
-	var req dto.LoginRequest // Reusing for simplicity
+	var req dto.RegisterRequest // Register require email username password
 	if err := c.BodyParser(&req); err != nil {
 		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
-	if err := h.uc.Register(req.Email, req.Password); err != nil {
+	if err := h.uc.Register(req.Email, req.Password,req.Username); err != nil {
 		return response.Error(c, fiber.StatusInternalServerError, "Registration failed")
 	}
 
