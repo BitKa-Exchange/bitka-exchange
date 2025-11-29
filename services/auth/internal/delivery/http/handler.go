@@ -15,8 +15,6 @@ func NewAuthHandler(uc domain.AuthUsecase) *AuthHandler {
 	return &AuthHandler{uc: uc}
 }
 
-
-
 func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	var req dto.LoginRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -40,7 +38,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
-	if err := h.uc.Register(req.Email, req.Password,req.Username); err != nil {
+	if err := h.uc.Register(req.Email, req.Username, req.Password); err != nil {
 		return response.Error(c, fiber.StatusInternalServerError, "Registration failed")
 	}
 

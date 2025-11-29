@@ -28,13 +28,12 @@ func checkPassword(password, hash string) bool {
     return err == nil
 }
 
-func (u *authUsecase) Login(email, password string) (*domain.TokenPair, error) {
-	user, err := u.repo.FindByEmailOrUser(email)
+func (u *authUsecase) Login(identifier, password string) (*domain.TokenPair, error) {
+	user, err := u.repo.FindByEmailOrUser(identifier)
 	if err != nil {
 		return nil, errors.New("invalid credentials")
 	}
 
-	// In real app: bcrypt.CompareHashAndPassword
 	if !checkPassword(password, user.PasswordHash)  {
 		return nil, errors.New("invalid credentials")
 	}
@@ -75,7 +74,7 @@ func (u *authUsecase) Register(email, password, username string) error {
 		ID:           uuid.New(),
 		Email:        email,
 		Username:	  username,
-		PasswordHash: hash_password, // TODO: Hash this!
+		PasswordHash: hash_password,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
