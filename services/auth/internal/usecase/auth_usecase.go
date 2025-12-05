@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	"time"
+	
 
 	"bitka/services/auth/internal/domain"
 	"golang.org/x/crypto/bcrypt"
@@ -65,7 +66,7 @@ func (u *authUsecase) Login(identifier, password string) (*domain.TokenPair, err
 	return &domain.TokenPair{AccessToken: access, RefreshToken: refresh}, nil
 }
 
-func (u *authUsecase) Register(email, password, username string) error {
+func (u *authUsecase) Register(email, username, password string) error {
 	hash_password, err := hashPassword(password)
 	if err != nil {
 		return err
