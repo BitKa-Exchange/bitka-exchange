@@ -18,33 +18,29 @@ func NewAccountUsecase(repo domain.AccountRepository) domain.AccountUsecase {
 	return &accountUC{repo: repo}
 }
 
-func (u *accountUC) GetMyProfile(userIDStr string) (*domain.Profile, error) {
-	uid, err := uuid.Parse(userIDStr)
-	if err != nil {
-		return nil, errors.New("invalid user id")
-	}
+func (u *accountUC) CreateUserProfile (id uuid.UUID ,email,username string) error {
+	return u.repo.CreateProfile(id, email, username)
+}
 
-	profile, err := u.repo.GetProfile(uid)
+func (u *accountUC) GetMyProfile(id uuid.UUID) (*domain.Profile, error) {
+	profile, err := u.repo.GetProfile(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			// Return a default empty profile if not found, or error based on requirements
-			return &domain.Profile{UserID: uid}, nil
+			return &domain.Profile{UserID: id}, nil
 		}
 		return nil, err
 	}
 	return profile, nil
 }
 
-func (u *accountUC) UpdateMyProfile(userIDStr, name, avatar string) error {
-	uid, err := uuid.Parse(userIDStr)
-	if err != nil {
-		return errors.New("invalid user id")
-	}
+func (u *accountUC) UpdateMyProfile(id uuid.UUID, fullName, avatar string) error {
+	profile := domain.Profile{
+        UserID: id,
+        FirstName: fullName,     
+        AvatarURL: avatar,
+        UpdatedAt: time.Now(),
+    }
 
-	return u.repo.UpsertProfile(&domain.Profile{
-		UserID:    uid,
-		FullName:  name,
-		AvatarURL: avatar,
-		UpdatedAt: time.Now(),
-	})
+    return u.repo.UpsertProfile(&profile)
 }

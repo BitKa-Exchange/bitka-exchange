@@ -2,7 +2,6 @@ package repository
 
 import (
 	"bitka/services/auth/internal/domain"
-
 	"gorm.io/gorm"
 )
 

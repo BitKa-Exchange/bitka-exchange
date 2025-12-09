@@ -7,6 +7,7 @@ import (
 	"bitka/pkg/config"
 	"bitka/pkg/logger"
 	"bitka/services/account/internal/app"
+	"bitka/services/account/internal/kafka"
 )
 
 func main() {
@@ -18,7 +19,7 @@ func main() {
 		cfg.DBName = "bitka_account"
 	}
 
-	server, err := app.NewServer(cfg)
+	server,uc, err := app.NewServer(cfg)
 	if err != nil {
 		log.Fatalf("Failed init: %v", err)
 	}
@@ -27,6 +28,9 @@ func main() {
 	if port == "" {
 		port = "3001"
 	}
+
+	kafkaConsumer := kafka.NewConsumer(uc)
+	kafkaConsumer.Start()
 
 	log.Printf("Starting Account Service on :%s", port)
 	server.Listen(":" + port)

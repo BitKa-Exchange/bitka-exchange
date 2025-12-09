@@ -1,0 +1,22 @@
+# Build stage
+FROM golang:1.24 AS builder
+ARG SERVICE
+WORKDIR /bitka-exchange
+
+COPY ../../ . 
+RUN go mod download
+
+COPY ./services/${SERVICE} ./services/${SERVICE}
+
+RUN CGO_ENABLED=0 GOOS=linux go build \
+    -o /bin/${SERVICE}-service \
+    ./services/${SERVICE}/cmd/server/main.go
+
+# Runtime stage
+FROM alpine:latest
+ARG SERVICE
+ENV SERVICE=${SERVICE}
+
+COPY --from=builder /bin/${SERVICE}-service /bin/${SERVICE}-service
+
+CMD /bin/${SERVICE}-service

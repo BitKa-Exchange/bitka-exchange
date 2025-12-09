@@ -17,7 +17,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-func NewServer(cfg *config.Config) (*fiber.App, error) {
+func NewServer(cfg *config.Config) (*fiber.App,domain.AccountUsecase, error) {
 	// 1. Connect to ACCOUNT Database (Not Auth DB)
 	db, err := database.Connect(database.Config{
 		Host:     cfg.DBHost,
@@ -28,7 +28,7 @@ func NewServer(cfg *config.Config) (*fiber.App, error) {
 		SSLMode:  "disable",
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil,err
 	}
 	db.AutoMigrate(&domain.Profile{})
 
@@ -55,5 +55,5 @@ func NewServer(cfg *config.Config) (*fiber.App, error) {
 
 	http.MapRoutes(app, handler, authMW)
 
-	return app, nil
+	return app, uc,nil
 }

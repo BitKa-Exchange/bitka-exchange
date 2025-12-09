@@ -10,7 +10,11 @@ import (
 // It shares the same ID as Auth User, but lives in a different DB.
 type Profile struct {
 	UserID    uuid.UUID `gorm:"type:uuid;primary_key"`
-	FullName  string
+	Email     string
+	FirstName string
+	LastName  string
+	Username  string
+	Age       int
 	AvatarURL string
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -18,10 +22,12 @@ type Profile struct {
 
 type AccountRepository interface {
 	GetProfile(userID uuid.UUID) (*Profile, error)
+	CreateProfile(userID uuid.UUID, email string , username string) error
 	UpsertProfile(profile *Profile) error
 }
 
 type AccountUsecase interface {
-	GetMyProfile(userID string) (*Profile, error)
-	UpdateMyProfile(userID string, fullName, avatar string) error
+	GetMyProfile(userID uuid.UUID) (*Profile, error)
+	UpdateMyProfile(userID uuid.UUID, fullName, avatar string) error
+	CreateUserProfile(userID uuid.UUID, email, username string) error
 }
