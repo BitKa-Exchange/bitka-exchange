@@ -11,7 +11,7 @@ endif
 AUTH_MAIN=services/auth/cmd/server/main.go
 ACCOUNT_MAIN=services/account/cmd/server/main.go
 
-.PHONY: help dev-infra dev-auth dev-account docker-up
+.PHONY: help dev-infra dev-auth dev-account docker-up gen-asyncapi gen-openapi docs
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -47,3 +47,14 @@ dev-account: ## Run Account Service
 
 docker-up: ## Start everything via Docker Compose
 	docker compose up -d --build
+
+# --- Documentation ---
+
+gen-asyncapi: ## Generate AsyncAPI docs from YAML to HTML
+	asyncapi generate fromTemplate ./docs/asyncapi/asyncapi.yaml @asyncapi/html-template@3.0.0 --use-new-generator -o ./docs/asyncapi/html -d generate:before
+
+gen-openapi: ## Generate OpenAPI docs from YAML to HTML
+	cd portal && npm run clean-api-docs && npm run gen-api-docs
+
+docs: ## Generate docs and start Docusaurus
+	@$(MAKE) gen-openapi && cd portal && npm run start
