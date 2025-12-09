@@ -1,0 +1,141 @@
+components:
+  schemas:
+    LedgerAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        asset:
+          type: string
+          example: "BTC"
+        available:
+          type: string
+          description: "Available (unlocked) balance as decimal string"
+        locked:
+          type: string
+          description: "Locked/reserved balance as decimal string"
+        created_at:
+          type: string
+          format: date-time
+      required: [id, user_id, asset, available, locked, created_at]
+
+    AccountList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LedgerAccount'
+        pagination:
+          $ref: './schemas.yaml#/components/schemas/Pagination'
+
+    TransactionStatus:
+      type: string
+      enum: [pending, posted, failed, reversed]
+
+    TransactionType:
+      type: string
+      enum: [debit, credit, transfer]
+      details: |
+        - debit: Deduct funds from an account
+        - credit: Add funds to an account
+        - transfer: Move funds between two accounts
+
+    LedgerTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        account_id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        amount:
+          type: string
+          description: "Decimal amount as string"
+        asset:
+          type: string
+          example: "BTC"
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        description:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+        related_tx_id:
+          type: string
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required: [id, account_id, type, amount, asset, status, created_at]
+
+    TransactionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LedgerTransaction'
+        pagination:
+          $ref: './schemas.yaml#/components/schemas/Pagination'
+
+    CreateTransactionRequest:
+      type: object
+      properties:
+        account_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [debit, credit, transfer]
+        amount:
+          type: string
+          description: "Decimal string"
+        asset:
+          type: string
+          example: "BTC"
+        description:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+        destination_account_username:
+          type: string
+          description: "For transfer type: destination account"
+      required: [account_id, type, amount, asset]
+
+    CreateTransactionResponse:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        message:
+          type: string
+
+    BalanceResponse:
+      type: object
+      properties:
+        account_id:
+          type: string
+          format: uuid
+        asset:
+          type: string
+          example: "BTC"
+        available:
+          type: string
+        locked:
+          type: string
+      required: [account_id, asset, available, locked]

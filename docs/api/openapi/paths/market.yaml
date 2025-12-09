@@ -1,0 +1,306 @@
+paths:
+  /marketdata/symbols:
+    get:
+      summary: List available symbols (market pairs)
+      tags: [MarketData]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Symbol list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/market_schemas.yaml#/components/schemas/SymbolList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+  /marketdata/candles:
+    get:
+      summary: Get candles (OHLCV) for a symbol and interval (historical)
+      tags: [MarketData]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: interval
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 1m
+        - name: start
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: "Start (inclusive) - ISO8601"
+        - name: end
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: "End (exclusive) - ISO8601"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: Candle series
+          headers:
+            Cache-Control:
+              description: 'Cache policy for historical data (set by API)'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/market_schemas.yaml#/components/schemas/CandleSeries'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+        '404':
+          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
+        '429':
+          $ref: '../components/market_responses.yaml#/components/responses/RateLimited'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+  /marketdata/ticks:
+    get:
+      summary: Get trades (ticks) for a symbol (historical)
+      tags: [MarketData]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 500
+      responses:
+        '200':
+          description: Trade list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/market_schemas.yaml#/components/schemas/TickList'
+        '404':
+          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
+        '429':
+          $ref: '../components/market_responses.yaml#/components/responses/RateLimited'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+  /marketdata/orderbook/{symbol}:
+    get:
+      summary: Orderbook snapshot (top N) for a symbol
+      tags: [MarketData]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: depth
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Orderbook snapshot
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/market_schemas.yaml#/components/schemas/OrderbookSnapshot'
+        '404':
+          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+  /marketdata/orderbook/{symbol}/history:
+    get:
+      summary: Historical orderbook deltas / snapshots for reconciliation
+      tags: [MarketData]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: Orderbook history (list of snapshots or updates)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          snapshots:
+                            type: array
+                            items:
+                              $ref: '../components/market_schemas.yaml#/components/schemas/OrderbookSnapshot'
+                          updates:
+                            type: array
+                            items:
+                              $ref: '../components/market_schemas.yaml#/components/schemas/OrderbookUpdate'
+        '404':
+          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+  /marketdata/stream:
+    get:
+      summary: Real-time streaming info (WebSocket)
+      tags: [MarketData]
+      description: >
+        This endpoint is the real-time streaming by WebSocket protocol, which isn't designed for OpenAPI documentation. The API Contract would come after.
+
+      # responses:
+      #   '200':
+      #     description: Real-time streaming protocol documentation
+      #     content:
+      #       application/json:
+      #         schema:
+      #           type: object
+      #           properties:
+      #             protocols:
+      #               type: array
+      #               items:
+      #                 type: string
+      #               example: ["websocket", "sse"]
+      #             websocket:
+      #               type: object
+      #               properties:
+      #                 url:
+      #                   type: string
+      #                   example: "wss://api.example.com/stream?token=<JWT>"
+      #                 auth:
+      #                   type: string
+      #                   description: "Pass JWT as query param `token` or in Sec-WebSocket-Protocol header"
+      #                 subscribe_example:
+      #                   type: object
+      #                   example:
+      #                     action: "subscribe"
+      #                     channel: "candles"
+      #                     symbol: "BTC-THB"
+      #                     interval: "1m"
+      #             sse:
+      #               type: object
+      #               properties:
+      #                 url:
+      #                   type: string
+      #                   example: "https://api.example.com/stream/sse?token=<JWT>"
+      #                 notes:
+      #                   type: string
+      #                   example: "SSE connections are HTTP GET; the server sends event: message lines"
+      #   '401':
+      #     description: Unauthorized
+      #     content:
+      #       application/json:
+      #         schema:
+      #           $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'

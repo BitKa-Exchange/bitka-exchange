@@ -1,0 +1,11 @@
+created:
+  publish:
+    summary: Order Service emits this when a new order is accepted.
+    message:
+      $ref: '../../components/messages/trading/OrderCreated.yaml'
+
+cancelled:
+  publish:
+    summary: Order Service emits this when an order is cancelled (by user or system).
+    message:
+      $ref: '../../components/messages/trading/OrderCancelled.yaml'

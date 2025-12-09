@@ -1,0 +1,14 @@
+components:
+  responses:
+    OrderConflict:
+      description: Conflict (e.g., duplicate client_order_id)
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+    OrderNotFound:
+      description: Order not found
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'

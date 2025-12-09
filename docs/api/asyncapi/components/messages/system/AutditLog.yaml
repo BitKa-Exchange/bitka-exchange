@@ -1,0 +1,13 @@
+name: AuditLogEvent
+title: General Audit Log
+payload:
+  type: object
+  properties:
+    service_name: { type: string, example: "auth-service" }
+    level: { type: string, enum: [INFO, WARN, ERROR, CRITICAL] }
+    action: { type: string, example: "password_reset_initiated" }
+    actor_id: { type: string, description: "User or Admin ID" }
+    resource_id: { type: string, description: "The object being changed" }
+    changes:
+      type: object
+      description: "JSON diff of what changed"

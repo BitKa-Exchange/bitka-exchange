@@ -1,0 +1,9 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        RS256 JWT Token obtained from /auth/login.
+        Services verify this using the JWKS endpoint at /.well-known/jwks.json.

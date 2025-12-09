@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: BitKa Exchange API
+  version: "0.3.0"
+  description: |
+    BitKa Exchange public API
+
+    # Note
+
+    ## The 3 States of a Property in OpenAPI
+
+    Every field can be described using **two dimensions**:
+
+    | Dimension                 | Meaning                                           |
+    | ------------------------- | ------------------------------------------------- |
+    | **required (true/false)** | Whether the key **must exist** in the JSON object |
+    | **nullable (true/false)** | Whether the value is allowed to be **`null`**     |
+
+    So we get **four combinations**.
+
+    ---
+
+    ### 1. **Required + Not Nullable**
+
+    ```yaml
+    properties:
+      data:
+        type: object
+    required: ["data"]
+    ```
+
+    JSON:
+
+    ✔️ `"data": {...}`
+    ❌ `"data": null`
+    ❌ missing `"data"`
+
+    This means:
+
+    > The property MUST exist and must **not** be null.
+
+    ---
+
+    ### 2. **Optional + Not Nullable**
+
+    ```yaml
+    properties:
+      data:
+        type: object
+    # not in required list
+    ```
+
+    JSON:
+
+    ✔️ `"data": {...}`
+    ✔️ omit `"data"`
+    ❌ `"data": null`
+
+    Meaning:
+
+    > If the server includes this field, it must NOT be null.
+    > But the server is allowed to drop/omit this field entirely.
+
+    This is what you called **“un-identified”** → not required and not nullable.
+
+    ---
+
+    ### 3. **Required + Nullable**
+
+    ```yaml
+    properties:
+      data:
+        type: object
+        nullable: true
+    required: ["data"]
+    ```
+
+    JSON:
+
+    ✔️ `"data": {...}`
+    ✔️ `"data": null`
+    ❌ missing `"data"`
+
+    Meaning:
+
+    > The key must be present, but value can be null.
+
+    Rarely good design — but sometimes used when you want:
+
+    * structural consistency
+    * but the data payload may be empty
+
+    ---
+
+    ### 4. **Optional + Nullable**
+
+    ```yaml
+    properties:
+      data:
+        type: object
+        nullable: true
+    # not required
+    ```
+
+    JSON:
+
+    ✔️ `"data": {...}`
+    ✔️ `"data": null`
+    ✔️ omit `"data"`
+
+    Meaning:
+
+    > Very permissive. The server can omit the field or return null.
+
+    Often *too flexible* for reliable client code.
+
+    ---
+
+servers:
+  - url: https://api.bitka.polishstack.com/v1
+    description: Production server
+  - url: https://localhost:8080/v1
+    description: Local trafik server
+  - url: https://localhost:3000/v1
+    description: Local auth service server
+  - url: https://localhost:3001/v1
+    description: Local user service server
+
+paths:
+  /auth/login:
+    $ref: './paths/auth.yaml#/paths/~1auth~1login'
+  /auth/register:
+    $ref: './paths/auth.yaml#/paths/~1auth~1register'
+  /auth/refresh:
+    $ref: './paths/auth.yaml#/paths/~1auth~1refresh'
+  /auth/logout:
+    $ref: './paths/auth.yaml#/paths/~1auth~1logout'
+  /.well-known/jwks.json:
+    $ref: './paths/auth.yaml#/paths/~1.well-known~1jwks.json'
+
+  /users/me:
+    $ref: './paths/user.yaml#/paths/~1users~1me'
+  /users/{id}:
+    $ref: './paths/user.yaml#/paths/~1users~1{id}'
+  /users/me/change-password:
+    $ref: './paths/user.yaml#/paths/~1users~1me~1change-password'
+
+  /ledger/accounts:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1accounts'
+  /ledger/accounts/{account_id}:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1accounts~1{account_id}'
+  /ledger/transactions:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1transactions'
+  /ledger/transactions/{transaction_id}:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1transactions~1{transaction_id}'
+
+  /orders:
+    $ref: './paths/order.yaml#/paths/~1orders'
+  /orders/{order_id}:
+    $ref: './paths/order.yaml#/paths/~1orders~1{order_id}'
+
+  /marketdata/symbols:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1symbols'
+  /marketdata/candles:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1candles'
+  /marketdata/ticks:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1ticks'
+  /marketdata/orderbook/{symbol}:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1orderbook~1{symbol}'
+  /marketdata/orderbook/{symbol}/history:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1orderbook~1{symbol}~1history'
+  /marketdata/stream:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1stream'
+
+
+components:
+  schemas:
+    $ref: './components/schemas.yaml#/components/schemas'
+  securitySchemes:
+    $ref: './components/security.yaml#/components/securitySchemes'
+
+security:
+  - bearerAuth: []

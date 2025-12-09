@@ -1,0 +1,21 @@
+name: LedgerTransactionEvent
+title: Ledger Transaction
+payload:
+  type: object
+  properties:
+    event_id: { type: string, format: uuid }
+    timestamp: { type: string, format: date-time }
+    data:
+      type: object
+      properties:
+        tx_id: { type: string }
+        user_id: { type: string }
+        type: 
+          type: string
+          enum: [deposit, withdrawal]
+        asset: { type: string, example: "USDT" }
+        amount: { type: string, example: "100.00" }
+        balance_after: { type: string, description: "User balance after tx" }
+        blockchain_hash: 
+          type: string
+          description: "On-chain Tx Hash (Null if internal transfer)"

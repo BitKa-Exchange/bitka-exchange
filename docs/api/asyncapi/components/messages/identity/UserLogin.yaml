@@ -1,0 +1,11 @@
+name: UserLoginEvent
+title: User Logged In
+payload:
+  type: object
+  properties:
+    user_id: { type: string }
+    timestamp: { type: string, format: date-time }
+    ip_address: { type: string, format: ipv4 }
+    device_id: { type: string }
+    user_agent: { type: string }
+    success: { type: boolean }
