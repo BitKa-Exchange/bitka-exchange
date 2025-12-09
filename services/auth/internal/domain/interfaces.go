@@ -7,14 +7,14 @@ import "time"
 // AuthRepository defines data access methods
 type AuthRepository interface {
 	CreateUser(user *User) error
-	FindByEmail(email string) (*User, error)
+	FindByEmailOrUser(identifier string) (*User, error)
 	SaveRefreshToken(token *RefreshToken) error
 }
 
 // AuthUsecase defines business logic methods
 type AuthUsecase interface {
 	Login(email, password string) (*TokenPair, error)
-	Register(email, password string) error
+	Register(email,username,password string) error
 	GetJWKS() ([]byte, error)
 }
 

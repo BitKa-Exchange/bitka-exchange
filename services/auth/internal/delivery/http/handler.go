@@ -4,7 +4,6 @@ import (
 	"bitka/pkg/response"
 	"bitka/services/auth/internal/delivery/http/dto"
 	"bitka/services/auth/internal/domain"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,7 +21,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
-	tokens, err := h.uc.Login(req.Email, req.Password)
+	tokens, err := h.uc.Login(req.Identifier, req.Password)
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, err.Error())
 	}
@@ -34,15 +33,24 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 }
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
-	var req dto.LoginRequest // Reusing for simplicity
+	var req dto.RegisterRequest // Register require email username password
 	if err := c.BodyParser(&req); err != nil {
 		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
-	if err := h.uc.Register(req.Email, req.Password); err != nil {
-		return response.Error(c, fiber.StatusInternalServerError, "Registration failed")
-	}
-
+	if req.Email == "" {
+        return response.Error(c, fiber.StatusBadRequest, "Email is required")
+    }
+    if req.Username == "" {
+        return response.Error(c, fiber.StatusBadRequest, "Username is required")
+    }
+    if req.Password == "" {
+        return response.Error(c, fiber.StatusBadRequest, "Password is required")
+    }
+    if err := h.uc.Register(req.Email, req.Username, req.Password); err != nil {
+       
+        return response.Error(c, fiber.StatusConflict, err.Error())
+    }
 	return response.Success(c, "User registered successfully")
 }
 
