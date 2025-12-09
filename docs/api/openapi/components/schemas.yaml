@@ -1,0 +1,137 @@
+components:
+  schemas:
+    APIEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+        meta:
+          $ref: '#/components/schemas/Meta'
+      required: [success, meta]
+
+    SuccessEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/APIEnvelope'
+        - type: object
+          required: [success, data]
+          properties:
+            success:
+              type: boolean
+              enum: [true]
+            error:
+              nullable: true
+              description: "Should be null or omitted on success"
+
+    ErrorEnvelope:
+      allOf:
+        - $ref: '#/components/schemas/APIEnvelope'
+        - type: object
+          required: [success, error]
+          properties:
+            success:
+              type: boolean
+              enum: [false]
+            data:
+              nullable: true
+              description: "Should be null or omitted on error"
+    
+    ErrorDetail:
+      type: object
+      properties:
+        code:
+          type: string
+          example: INVALID_INPUT
+        message:
+          type: string
+        details:
+          type: object 
+        instance:
+          type: string
+      required: [code, message, instance]
+
+    Meta:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+          description: Unique identifier for the request
+      required: [request_id]
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+
+    LoginRequest:
+      type: object
+      properties:
+        identifier:
+          type: string
+          format: email
+        password:
+          type: string
+      required: [identifier, password]
+
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required: [username, email, password]
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+      required: [access_token, refresh_token]
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        avatar_url:
+          type: string
+      required: [id, email]
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        full_name:
+          type: string
+        avatar_url:
+          type: string
+
+    ChangePasswordRequest:
+      type: object
+      properties:
+        current_password:
+          type: string
+        new_password:
+          type: string
+      required: [current_password, new_password]

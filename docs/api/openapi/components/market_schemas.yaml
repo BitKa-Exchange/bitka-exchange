@@ -1,0 +1,147 @@
+components:
+  schemas:
+    Candle:
+      type: object
+      properties:
+        symbol:
+          type: string
+        interval:
+          type: string
+          description: "ISO interval like 1m, 5m, 1h, 1d"
+        open:
+          type: string
+          description: "Open price as decimal string"
+        high:
+          type: string
+        low:
+          type: string
+        close:
+          type: string
+        volume:
+          type: string
+          description: "Volume during interval as decimal string"
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+      required: [symbol, interval, open, high, low, close, start_time, end_time]
+
+    CandleSeries:
+      type: object
+      properties:
+        symbol:
+          type: string
+        interval:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candle'
+        pagination:
+          $ref: './schemas.yaml#/components/schemas/Pagination'
+
+    Tick:
+      type: object
+      properties:
+        trade_id:
+          type: string
+        symbol:
+          type: string
+        price:
+          type: string
+        quantity:
+          type: string
+        side:
+          type: string
+          enum: [buy, sell]
+        timestamp:
+          type: string
+          format: date-time
+      required: [trade_id, symbol, price, quantity, timestamp]
+
+    TickList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tick'
+        pagination:
+          $ref: './schemas.yaml#/components/schemas/Pagination'
+
+    OrderbookEntry:
+      type: object
+      properties:
+        price:
+          type: string
+        quantity:
+          type: string
+      required: [price, quantity]
+
+    OrderbookSnapshot:
+      type: object
+      properties:
+        symbol:
+          type: string
+        seq:
+          type: integer
+          description: "Monotonic sequence number for snapshots/updates"
+        bids:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderbookEntry'
+        asks:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderbookEntry'
+        timestamp:
+          type: string
+          format: date-time
+      required: [symbol, seq, bids, asks, timestamp]
+
+    OrderbookUpdate:
+      type: object
+      properties:
+        symbol:
+          type: string
+        seq:
+          type: integer
+        changes:
+          type: array
+          description: "List of changes: {side, price, quantity} (set quantity to 0 to remove)"
+          items:
+            type: object
+            properties:
+              side:
+                type: string
+                enum: [bid, ask]
+              price:
+                type: string
+              quantity:
+                type: string
+      required: [symbol, seq, changes]
+
+    SymbolList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              symbol:
+                type: string
+              base_asset:
+                type: string
+                description: "Base asset being traded"
+                example: "BTC"
+              quote_asset:
+                type: string
+                description: "Asset used to price the base asset"
+                example: "THB"
+              active:
+                type: boolean
+        pagination:
+          $ref: './schemas.yaml#/components/schemas/Pagination'

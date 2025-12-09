@@ -1,0 +1,45 @@
+asyncapi: 2.6.0
+info:
+  title: BitKa Event Bus
+  version: 1.0.0
+  description: >
+    Defines all Kafka topics
+
+servers:
+  dev:
+    url: localhost:9092
+    protocol: kafka
+    description: Local Docker Kafka
+  prod:
+    url: kafka.bitka.internal:9092
+    protocol: kafka
+    description: Production Cluster
+
+channels:
+  # --- TRADING DOMAIN ---
+  trading.orders.created:
+    $ref: './channels/trading/orders.yaml#/created'
+  trading.orders.cancelled:
+    $ref: './channels/trading/orders.yaml#/cancelled'
+  trading.matches.executed:
+    $ref: './channels/trading/matches.yaml'
+
+  # --- ACCOUNTING DOMAIN ---
+  accounting.ledger.deposited:
+    $ref: './channels/accounting/ledger.yaml#/deposited'
+  accounting.ledger.withdrawn:
+    $ref: './channels/accounting/ledger.yaml#/withdrawn'
+
+  # --- IDENTITY DOMAIN ---
+  identity.user.login:
+    $ref: './channels/identity/users.yaml#/login'
+  identity.kyc.updated:
+    $ref: './channels/identity/kyc.yaml'
+
+  # --- MARKET DATA DOMAIN ---
+  market.price.tick:
+    $ref: './channels/market/prices.yaml'
+
+  # --- SYSTEM DOMAIN ---
+  system.audit.log:
+    $ref: './channels/system/audit.yaml'
