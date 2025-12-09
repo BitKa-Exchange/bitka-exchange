@@ -1,0 +1,30 @@
+name: TradeExecutedEvent
+title: Trade Executed
+summary: Two orders matched. Money changes hands.
+contentType: application/json
+payload:
+  type: object
+  required: [event_id, timestamp, data]
+  properties:
+    event_id: { type: string, format: uuid }
+    timestamp: { type: string, format: date-time }
+    data:
+      type: object
+      properties:
+        match_id: { type: string, format: uuid }
+        symbol: { type: string, example: "BTC_THB" }
+        price: { type: string, example: "3500000.00" }
+        quantity: { type: string, example: "0.50000000" }
+        
+        # Maker Details (Passive)
+        maker_order_id: { type: string }
+        maker_user_id: { type: string }
+        maker_fee: { type: string, description: "Fee charged to maker" }
+        maker_fee_asset: { type: string, example: "THB" }
+        
+        # Taker Details (Aggressive)
+        taker_order_id: { type: string }
+        taker_user_id: { type: string }
+        taker_fee: { type: string, description: "Fee charged to taker" }
+        taker_fee_asset: { type: string, example: "BTC" }
+        taker_side: { type: string, enum: [buy, sell], description: "Direction of the taker" }

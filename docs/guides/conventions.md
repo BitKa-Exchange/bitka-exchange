@@ -109,7 +109,7 @@ This document outlines the conventions used in the Digital Bank project for Git 
     "status": "success",
     "details": {
       "amount": 10.0,
-      "currency": "USDT",
+      "asset": "USDT",
       "to_user_id": "67890"
     }
   }

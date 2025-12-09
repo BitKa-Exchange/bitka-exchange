@@ -1,0 +1,13 @@
+description: Stream of new orders placed by users.
+
+publish:
+  summary: Order Service publishes this when a user submits an order.
+  operationId: emitOrderCreated
+  message:
+    $ref: '../components/messages/OrderCreated.yaml'
+
+subscribe:
+  summary: Matching Engine listens to this to match trades.
+  operationId: consumeOrderCreated
+  message:
+    $ref: '../components/messages/OrderCreated.yaml'

@@ -1,0 +1,15 @@
+components:
+  responses:
+    BadSymbol:
+      description: Invalid or unknown symbol
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+
+    RateLimited:
+      description: Rate limited
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
