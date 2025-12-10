@@ -24,8 +24,8 @@ jobs:
       # - name: Build account-service
       #   run: docker build --build-arg SERVICE=account -t ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest -f services/Dockerfile.account .
 
-      - name: Push account-service to Dockerhub
-        run: docker push ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest
+      # - name: Push account-service to Dockerhub
+      #   run: docker push ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest
       
   deploy:
     needs: build
