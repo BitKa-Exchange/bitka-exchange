@@ -1,7 +1,7 @@
 ---
 id: bitka-exchange-api
 title: "BitKa Exchange API"
-description: "BitKa Exchange public API"
+description: "BitKa Exchange public API."
 sidebar_label: Introduction
 sidebar_position: 0
 hide_title: true
@@ -29,7 +29,21 @@ import Export from "@theme/ApiExplorer/Export";
 
 
 
-BitKa Exchange public API
+BitKa Exchange public API.
+
+This API Gateway unifies all microservices. You can connect to the Gateway (recommended) or directly to individual services during development.
+
+### 🖥️ Server Environment Reference
+
+| Service | URL | Description |
+| :--- | :--- | :--- |
+| **Prodcution server** | `https://api.bitka.polishstack.com` | **Primary Entrypoint.** Routes to all services based on path. |
+| **Gateway (Traefik)** | `http://localhost:80` | **Primary Entrypoint.** Routes to all services based on path. |
+| **Auth Service** | `http://localhost:3000` | Direct access to Auth (Login, JWT). |
+| **User Service** | `http://localhost:3001` | Direct access to User profiles & KYC. |
+| **Ledger Service** | `http://localhost:3002` | Direct access to Wallets & Transactions. |
+| **Order Service** | `http://localhost:3003` | Direct access to Order placement. |
+| **MarketData** | `http://localhost:3004` | Direct access to Public data (Candles/Ticks). |
 
 # Note
 
