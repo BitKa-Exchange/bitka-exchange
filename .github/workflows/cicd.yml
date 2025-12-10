@@ -39,5 +39,5 @@ jobs:
       - name: Deploy Services
         run: |
           cd /home/deploy/bitka-exchange
-          docker compose pull
-          docker compose up -d
+          docker-compose pull
+          docker-compose up -d
