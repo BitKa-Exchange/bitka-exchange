@@ -21,8 +21,8 @@ jobs:
       - name: Push auth-service to Dockerhub
         run: docker push ${{secrets.DOCKER_USERNAME}}/bitka-auth-service:latest
 
-      - name: Build account-service
-        run: docker build --build-arg SERVICE=account -t ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest -f services/Dockerfile.account .
+      # - name: Build account-service
+      #   run: docker build --build-arg SERVICE=account -t ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest -f services/Dockerfile.account .
 
       - name: Push account-service to Dockerhub
         run: docker push ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest
@@ -32,9 +32,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Pull Images
-        run: |
-          docker pull ${{secrets.DOCKER_USERNAME}}/bitka-auth-service:latest
-          docker pull ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest
+        run: docker pull ${{secrets.DOCKER_USERNAME}}/bitka-auth-service:latest
 
       - name: Deploy Services
         run: |
