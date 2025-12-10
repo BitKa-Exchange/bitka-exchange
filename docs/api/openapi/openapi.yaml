@@ -11,6 +11,7 @@ info:
 
     | Service | URL | Description |
     | :--- | :--- | :--- |
+    | **Prodcution server** | `https://api.bitka.polishstack.com` | **Primary Entrypoint.** Routes to all services based on path. |
     | **Gateway (Traefik)** | `http://localhost:80` | **Primary Entrypoint.** Routes to all services based on path. |
     | **Auth Service** | `http://localhost:3000` | Direct access to Auth (Login, JWT). |
     | **User Service** | `http://localhost:3001` | Direct access to User profiles & KYC. |
