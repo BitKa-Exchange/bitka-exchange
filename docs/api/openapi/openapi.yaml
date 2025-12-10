@@ -119,7 +119,7 @@ info:
 servers:
   - url: https://api.bitka.polishstack.com
     description: Production server
-  - url: https://localhost:8080
+  - url: https://localhost:80
     description: Local trafik server
   - url: https://localhost:3000
     description: Local auth service server
