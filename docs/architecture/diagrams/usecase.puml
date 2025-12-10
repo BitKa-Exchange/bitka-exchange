@@ -1,0 +1,83 @@
+@startuml usecase
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
+    ArrowColor Black
+}
+
+actor "Trader (User)" as User
+actor "Blockchain Network" as Chain
+actor "Email Service" as Mailer
+
+package "Bitka v0.3" {
+
+    '--- Account Management ---
+    usecase "Register" as UC_Reg
+    usecase "Login" as UC_Login
+    usecase "Manage KYC & Profile" as UC_KYC
+    usecase "Verify Email" as UC_VerifyEmail
+    usecase "Apply Invite Code" as UC_Invite
+    
+    '--- Wallet / Ledger ---
+    usecase "View Balance & History" as UC_ViewBal
+    usecase "Deposit Crypto" as UC_Dep
+    usecase "Withdraw Crypto" as UC_With
+    usecase "Check Balance" as UC_CheckBal
+
+    '--- Trading ---
+    usecase "Place Order" as UC_Trade
+    usecase "Cancel Order" as UC_Cancel
+    usecase "Market Order" as UC_Mkt
+    usecase "Limit Order" as UC_Lmt
+
+    '--- System Actions ---
+    usecase "Send Notification" as UC_Notify
+    usecase "Grant Initial Crypto" as UC_Bonus
+}
+
+'--- Relationships ---
+
+' 1. Registration Flow
+User --> UC_Reg
+UC_Reg ..> UC_VerifyEmail : <<include>>
+UC_Invite .> UC_Reg : <<extend>> \n(if code provided)
+UC_Invite ..> UC_Bonus : <<include>> \n(trigger ledger)
+UC_Reg ..> UC_Notify : <<include>>
+
+' 2. Login & Profile
+User --> UC_Login
+User --> UC_KYC
+UC_KYC ..> UC_Notify : <<include>> \n(Status Update)
+
+' 3. Wallet / Ledger
+User --> UC_ViewBal
+User --> UC_Dep
+User --> UC_With
+
+' Dependency: Must have money to withdraw
+UC_With ..> UC_CheckBal : <<include>>
+UC_With --> Chain : (Trigger Tx)
+UC_With ..> UC_Notify : <<include>>
+
+' Deposit Logic (User views address, Chain sends funds)
+UC_Dep <.. Chain : (Incoming Tx Event)
+UC_Dep ..> UC_Notify : <<include>>
+
+' 4. Trading
+User --> UC_Trade
+User --> UC_Cancel
+
+' Inheritance: Types of orders
+UC_Mkt --|> UC_Trade
+UC_Lmt --|> UC_Trade
+
+' Dependencies for Trading
+UC_Trade ..> UC_CheckBal : <<include>> \n(Ledger Lock)
+UC_Trade ..> UC_Notify : <<include>>
+
+' System sending emails
+UC_Notify --> Mailer
+
+@enduml

@@ -3,7 +3,7 @@ package usecase
 import (
 	"errors"
 	"time"
-	"log"
+	
 
 	"bitka/services/auth/internal/domain"
 	"bitka/services/auth/internal/delivery/event"

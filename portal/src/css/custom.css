@@ -1,0 +1,76 @@
+/**
+ * Global CSS overrides for Docusaurus
+ */
+
+/* Light mode palette */
+:root {
+  --ifm-color-primary: #F935A1;
+  --ifm-color-primary-dark: #E02F92;
+  --ifm-color-primary-darker: #C82882;
+  --ifm-color-primary-darkest: #A02069;
+  --ifm-color-primary-light: #FF4FB0;
+  --ifm-color-primary-lighter: #FF6ABD;
+  --ifm-color-primary-lightest: #FF8ACD;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode palette (lighter for readability) */
+[data-theme='dark'] {
+  --ifm-color-primary: #FF6ABD;
+  --ifm-color-primary-dark: #FF4FB0;
+  --ifm-color-primary-darker: #F935A1;
+  --ifm-color-primary-darkest: #E02F92;
+  --ifm-color-primary-light: #FF8ACD;
+  --ifm-color-primary-lighter: #FFA3D8;
+  --ifm-color-primary-lightest: #FFBDE4;
+
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.15);
+}
+
+/* Sidebar Method labels */
+.api-method>.menu__link {
+  align-items: center;
+  justify-content: start;
+}
+
+.api-method>.menu__link::before {
+  width: 50px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  margin-right: var(--ifm-spacing-horizontal);
+  text-align: center;
+  flex-shrink: 0;
+  color: white;
+}
+
+.get>.menu__link::before {
+  content: "get";
+  background-color: var(--ifm-color-primary);
+}
+
+.put>.menu__link::before {
+  content: "put";
+  background-color: var(--openapi-code-blue);
+}
+
+.post>.menu__link::before {
+  content: "post";
+  background-color: var(--openapi-code-green);
+}
+
+.delete>.menu__link::before {
+  content: "del";
+  background-color: var(--openapi-code-red);
+}
+
+.patch>.menu__link::before {
+  content: "patch";
+  background-color: var(--openapi-code-orange);
+}

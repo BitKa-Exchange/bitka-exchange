@@ -1,0 +1,176 @@
+paths:
+  /orders:
+    post:
+      summary: Create order
+      tags: [Orders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: "Idempotency key for create order endpoint"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/order_schemas.yaml#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Order accepted (created)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/order_schemas.yaml#/components/schemas/CreateOrderResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+        '409':
+          $ref: '../components/order_responses.yaml#/components/responses/OrderConflict'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+        '500':
+          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+
+    get:
+      summary: List orders (filterable)
+      tags: [Orders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 25
+        - name: symbol
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: user_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/order_schemas.yaml#/components/schemas/OrderList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+  /orders/{order_id}:
+    get:
+      summary: Get order by id
+      tags: [Orders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/order_schemas.yaml#/components/schemas/Order'
+        '404':
+          $ref: '../components/order_responses.yaml#/components/responses/OrderNotFound'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+
+    delete:
+      summary: Cancel order by id
+      tags: [Orders]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: "Optional idempotency key to deduplicate cancel attempts"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '../components/order_schemas.yaml#/components/schemas/CancelOrderRequest'
+      responses:
+        '200':
+          description: Cancel accepted (or already canceled)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '../components/order_schemas.yaml#/components/schemas/CancelOrderResponse'
+        '404':
+          $ref: '../components/order_responses.yaml#/components/responses/OrderNotFound'
+        '409':
+          $ref: '../components/order_responses.yaml#/components/responses/OrderConflict'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+        '500':
+          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
