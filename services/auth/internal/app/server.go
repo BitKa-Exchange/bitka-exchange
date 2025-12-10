@@ -4,10 +4,13 @@ import (
 	"bitka/pkg/config"
 	"bitka/pkg/database"
 	"bitka/pkg/token"
+	"bitka/services/auth/internal/delivery/event"
 	"bitka/services/auth/internal/delivery/http"
 	"bitka/services/auth/internal/domain"
 	"bitka/services/auth/internal/repository"
 	"bitka/services/auth/internal/usecase"
+	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -40,7 +43,12 @@ func NewServer(cfg *config.Config) (*fiber.App, error) {
 
 	// 3. Layer Dependency Injection
 	repo := repository.NewDatabaseRepo(db)
-	uc := usecase.NewAuthUsecase(repo, tokenMgr)
+	broker := os.Getenv("KAFKA_BROKER")
+	kafkaProducer, Err := event.NewProducer([]string{broker})
+	if Err != nil {
+		log.Fatal("Kafka producer failed:", Err)
+	}
+	uc := usecase.NewAuthUsecase(repo, tokenMgr, kafkaProducer)
 	handler := http.NewAuthHandler(uc)
 
 	// 4. Framework Setup
