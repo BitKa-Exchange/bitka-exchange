@@ -11,10 +11,8 @@ import (
 type Profile struct {
 	UserID    uuid.UUID `gorm:"type:uuid;primary_key"`
 	Email     string
-	FirstName string
-	LastName  string
-	Username  string
-	Age       int
+	Username string
+	FullName string
 	AvatarURL string
 	CreatedAt time.Time
 	UpdatedAt time.Time

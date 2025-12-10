@@ -3,6 +3,7 @@ package http
 import (
 	"bitka/pkg/response"
 	"bitka/services/account/internal/domain"
+    "bitka/services/account/internal/delivery/http/dto"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -34,16 +35,11 @@ func (h *AccountHandler) GetProfile(c *fiber.Ctx) error {
 
 
 func (h *AccountHandler) UpdateProfile(c *fiber.Ctx) error {
+    var req dto.UpdateProfileRequest
     userIDStr := c.Locals("user_id").(string)
-
     userID, err := uuid.Parse(userIDStr)
     if err != nil {
         return response.Error(c, fiber.StatusBadRequest, "Invalid user ID")
-    }
-
-    var req struct {
-        FullName  string `json:"full_name"`
-        AvatarURL string `json:"avatar_url"`
     }
 
     if err := c.BodyParser(&req); err != nil {

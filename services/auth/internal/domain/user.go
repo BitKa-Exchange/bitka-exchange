@@ -14,3 +14,9 @@ type User struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
+
+type UserRegisterEvent struct {
+	UserID   uuid.UUID `json:"user_id"`
+	Email    string    `json:"email"`
+	Username string    `json:"username"`
+}

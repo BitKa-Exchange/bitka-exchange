@@ -37,7 +37,7 @@ func (u *accountUC) GetMyProfile(id uuid.UUID) (*domain.Profile, error) {
 func (u *accountUC) UpdateMyProfile(id uuid.UUID, fullName, avatar string) error {
 	profile := domain.Profile{
         UserID: id,
-        FirstName: fullName,     
+        FullName: fullName,     
         AvatarURL: avatar,
         UpdatedAt: time.Now(),
     }

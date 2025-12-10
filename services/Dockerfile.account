@@ -3,9 +3,13 @@ FROM golang:1.24 AS builder
 ARG SERVICE
 WORKDIR /bitka-exchange
 
-COPY ../../ . 
-RUN go mod download
+COPY ../go.work .
+COPY ./services/auth/go.mod ./services/auth/go.mod
+COPY ./services/account/go.mod ./services/account/go.mod
+COPY ./pkg/go.mod ./pkg/go.mod
 
+RUN go mod download
+COPY ./pkg ./pkg
 COPY ./services/${SERVICE} ./services/${SERVICE}
 
 RUN CGO_ENABLED=0 GOOS=linux go build \
