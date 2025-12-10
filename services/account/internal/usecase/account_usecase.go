@@ -18,7 +18,7 @@ func NewAccountUsecase(repo domain.AccountRepository) domain.AccountUsecase {
 	return &accountUC{repo: repo}
 }
 
-func (u *accountUC) CreateUserProfile (id uuid.UUID ,email,username string) error {
+func (u *accountUC) CreateUserProfile(id uuid.UUID, email, username string) error {
 	return u.repo.CreateProfile(id, email, username)
 }
 
@@ -36,11 +36,11 @@ func (u *accountUC) GetMyProfile(id uuid.UUID) (*domain.Profile, error) {
 
 func (u *accountUC) UpdateMyProfile(id uuid.UUID, fullName, avatar string) error {
 	profile := domain.Profile{
-        UserID: id,
-        FullName: fullName,     
-        AvatarURL: avatar,
-        UpdatedAt: time.Now(),
-    }
+		UserID:    id,
+		FullName:  fullName,
+		AvatarURL: avatar,
+		UpdatedAt: time.Now(),
+	}
 
-    return u.repo.UpsertProfile(&profile)
+	return u.repo.UpsertProfile(&profile)
 }

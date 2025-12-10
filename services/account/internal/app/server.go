@@ -5,10 +5,10 @@ import (
 	"bitka/services/account/internal/delivery/http"
 	"bitka/services/account/internal/domain"
 
+	"bitka/pkg/token"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"bitka/pkg/token"
 )
 
 func NewServer(uc domain.AccountUsecase, validator *token.Validator) *fiber.App {

@@ -1,16 +1,16 @@
 package app
 
 import (
-	"log"
-	"os"
 	"bitka/pkg/config"
 	"bitka/pkg/database"
 	"bitka/pkg/token"
+	"bitka/services/auth/internal/delivery/event"
 	"bitka/services/auth/internal/delivery/http"
 	"bitka/services/auth/internal/domain"
-	"bitka/services/auth/internal/delivery/event"
 	"bitka/services/auth/internal/repository"
 	"bitka/services/auth/internal/usecase"
+	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"

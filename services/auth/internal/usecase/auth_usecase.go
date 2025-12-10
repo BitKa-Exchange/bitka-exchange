@@ -2,11 +2,11 @@ package usecase
 
 import (
 	"errors"
-	"time"
 	"log"
+	"time"
 
-	"bitka/services/auth/internal/domain"
 	"bitka/services/auth/internal/delivery/event"
+	"bitka/services/auth/internal/domain"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )

@@ -11,8 +11,8 @@ import (
 type Profile struct {
 	UserID    uuid.UUID `gorm:"type:uuid;primary_key"`
 	Email     string
-	Username string
-	FullName string
+	Username  string
+	FullName  string
 	AvatarURL string
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -20,7 +20,7 @@ type Profile struct {
 
 type AccountRepository interface {
 	GetProfile(userID uuid.UUID) (*Profile, error)
-	CreateProfile(userID uuid.UUID, email string , username string) error
+	CreateProfile(userID uuid.UUID, email string, username string) error
 	UpsertProfile(profile *Profile) error
 }
 

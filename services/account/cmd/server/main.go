@@ -9,10 +9,10 @@ import (
 	"bitka/pkg/logger"
 	"bitka/pkg/token"
 
+	"bitka/services/account/internal/app"
 	"bitka/services/account/internal/domain"
 	"bitka/services/account/internal/repository"
 	"bitka/services/account/internal/usecase"
-	"bitka/services/account/internal/app"
 
 	"bitka/services/account/internal/delivery/event"
 )
@@ -42,9 +42,8 @@ func main() {
 	repo := repository.NewAccountRepo(db)
 	uc := usecase.NewAccountUsecase(repo)
 
-
 	// 3. JWT Validator
-	
+
 	jwksURL := os.Getenv("AUTH_JWKS_URL")
 	if jwksURL == "" {
 		jwksURL = "http://localhost:3000/.well-known/jwks.json"
@@ -55,7 +54,7 @@ func main() {
 
 	kafkaHandler := event.NewHandler(uc)
 	kafkaServer := event.NewServer(kafkaHandler)
-	go kafkaServer.Start() 
+	go kafkaServer.Start()
 
 	// 5. HTTP Server
 
