@@ -117,60 +117,60 @@ info:
     ---
 
 servers:
-  - url: https://api.bitka.polishstack.com/v1
+  - url: https://api.bitka.polishstack.com
     description: Production server
-  - url: https://localhost:8080/v1
+  - url: https://localhost:8080
     description: Local trafik server
-  - url: https://localhost:3000/v1
+  - url: https://localhost:3000
     description: Local auth service server
-  - url: https://localhost:3001/v1
+  - url: https://localhost:3001
     description: Local user service server
 
 paths:
-  /auth/login:
-    $ref: './paths/auth.yaml#/paths/~1auth~1login'
-  /auth/register:
-    $ref: './paths/auth.yaml#/paths/~1auth~1register'
-  /auth/refresh:
-    $ref: './paths/auth.yaml#/paths/~1auth~1refresh'
-  /auth/logout:
-    $ref: './paths/auth.yaml#/paths/~1auth~1logout'
-  /.well-known/jwks.json:
+  /auth/v1/login:
+    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1login'
+  /auth/v1/register:
+    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1register'
+  /auth/v1/refresh:
+    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1refresh'
+  /auth/v1/logout:
+    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1logout'
+  /./v1well-known/jwks.json:
     $ref: './paths/auth.yaml#/paths/~1.well-known~1jwks.json'
 
-  /users/me:
-    $ref: './paths/user.yaml#/paths/~1users~1me'
-  /users/{id}:
-    $ref: './paths/user.yaml#/paths/~1users~1{id}'
-  /users/me/change-password:
-    $ref: './paths/user.yaml#/paths/~1users~1me~1change-password'
+  /users/v1/me:
+    $ref: './paths/user.yaml#/paths/~1users~1v1~1me'
+  /users/v1/{id}:
+    $ref: './paths/user.yaml#/paths/~1users~1v1~1{id}'
+  /users/v1/me/change-password:
+    $ref: './paths/user.yaml#/paths/~1users~1v1~1me~1change-password'
 
-  /ledger/accounts:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1accounts'
-  /ledger/accounts/{account_id}:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1accounts~1{account_id}'
-  /ledger/transactions:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1transactions'
-  /ledger/transactions/{transaction_id}:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1transactions~1{transaction_id}'
+  /ledger/v1/accounts:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1accounts'
+  /ledger/v1/accounts/{account_id}:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1accounts~1{account_id}'
+  /ledger/v1/transactions:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1transactions'
+  /ledger/v1/transactions/{transaction_id}:
+    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1transactions~1{transaction_id}'
 
-  /orders:
+  /orders/v1:
     $ref: './paths/order.yaml#/paths/~1orders'
-  /orders/{order_id}:
-    $ref: './paths/order.yaml#/paths/~1orders~1{order_id}'
+  /orders/v1/{order_id}:
+    $ref: './paths/order.yaml#/paths/~1orders~1v1~1{order_id}'
 
-  /marketdata/symbols:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1symbols'
-  /marketdata/candles:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1candles'
-  /marketdata/ticks:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1ticks'
-  /marketdata/orderbook/{symbol}:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1orderbook~1{symbol}'
-  /marketdata/orderbook/{symbol}/history:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1orderbook~1{symbol}~1history'
-  /marketdata/stream:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1stream'
+  /marketdata/v1/symbols:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1symbols'
+  /marketdata/v1/candles:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1candles'
+  /marketdata/v1/ticks:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1ticks'
+  /marketdata/v1/orderbook/{symbol}:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1orderbook~1{symbol}'
+  /marketdata/v1/orderbook/{symbol}/history:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1orderbook~1{symbol}~1history'
+  /marketdata/v1/stream:
+    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1stream'
 
 
 components:

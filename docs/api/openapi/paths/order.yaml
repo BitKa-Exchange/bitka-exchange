@@ -94,7 +94,7 @@ paths:
               schema:
                 $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
 
-  /orders/{order_id}:
+  /orders/v1/{order_id}:
     get:
       summary: Get order by id
       tags: [Orders]

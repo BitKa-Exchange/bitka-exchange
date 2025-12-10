@@ -1,5 +1,5 @@
 paths:
-  /users/me:
+  /users/v1/me:
     get:
       summary: Get current user profile
       tags: [Users]
@@ -61,7 +61,7 @@ paths:
         '500':
           $ref: '../components/responses.yaml#/components/responses/InternalServerError'
 
-  /users/{id}:
+  /users/v1/{id}:
     get:
       summary: Get user profile by ID
       tags: [Users]
@@ -133,7 +133,7 @@ paths:
         '500':
           $ref: '../components/responses.yaml#/components/responses/InternalServerError'
 
-  /users/me/change-password:
+  /users/v1/me/change-password:
     post:
       summary: Change password for the authenticated user
       tags: [Users]

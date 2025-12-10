@@ -1,5 +1,5 @@
 paths:
-  /ledger/accounts:
+  /ledger/v1/accounts:
     get:
       summary: List ledger accounts
       tags: [Ledger]
@@ -47,7 +47,7 @@ paths:
         '500':
           $ref: '../components/responses.yaml#/components/responses/InternalServerError'
 
-  /ledger/accounts/{account_id}:
+  /ledger/v1/accounts/{account_id}:
     get:
       summary: Get ledger account by id
       tags: [Ledger]
@@ -87,7 +87,7 @@ paths:
         '500':
           $ref: '../components/responses.yaml#/components/responses/InternalServerError'
 
-  /ledger/transactions:
+  /ledger/v1/transactions:
     get:
       summary: List transactions
       tags: [Ledger]
@@ -201,7 +201,7 @@ paths:
         '500':
           $ref: '../components/responses.yaml#/components/responses/InternalServerError'
 
-  /ledger/transactions/{transaction_id}:
+  /ledger/v1/transactions/{transaction_id}:
     get:
       summary: Get transaction by id
       tags: [Ledger]
