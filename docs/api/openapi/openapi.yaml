@@ -146,50 +146,50 @@ servers:
     description: Local marketdata service server
 
 paths:
-  /auth/v1/login:
-    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1login'
-  /auth/v1/register:
-    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1register'
-  /auth/v1/refresh:
-    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1refresh'
-  /auth/v1/logout:
-    $ref: './paths/auth.yaml#/paths/~1auth~1v1~1logout'
-  /./v1well-known/jwks.json:
+  /v1/auth/login:
+    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1login'
+  /v1/auth/register:
+    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1register'
+  /v1/auth/refresh:
+    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1refresh'
+  /v1/auth/logout:
+    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1logout'
+  /v1/.well-known/jwks.json:
     $ref: './paths/auth.yaml#/paths/~1.well-known~1jwks.json'
 
-  /users/v1/me:
-    $ref: './paths/user.yaml#/paths/~1users~1v1~1me'
-  /users/v1/{id}:
-    $ref: './paths/user.yaml#/paths/~1users~1v1~1{id}'
-  /users/v1/me/change-password:
-    $ref: './paths/user.yaml#/paths/~1users~1v1~1me~1change-password'
+  /v1/users/me:
+    $ref: './paths/user.yaml#/paths/~1v1~1users~1me'
+  /v1/users/{id}:
+    $ref: './paths/user.yaml#/paths/~1v1~1users~1{id}'
+  /v1/users/me/change-password:
+    $ref: './paths/user.yaml#/paths/~1v1~1users~1me~1change-password'
 
-  /ledger/v1/accounts:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1accounts'
-  /ledger/v1/accounts/{account_id}:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1accounts~1{account_id}'
-  /ledger/v1/transactions:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1transactions'
-  /ledger/v1/transactions/{transaction_id}:
-    $ref: './paths/ledger.yaml#/paths/~1ledger~1v1~1transactions~1{transaction_id}'
+  /v1/ledger/accounts:
+    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1accounts'
+  /v1/ledger/accounts/{account_id}:
+    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1accounts~1{account_id}'
+  /v1/ledger/transactions:
+    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1transactions'
+  /v1/ledger/transactions/{transaction_id}:
+    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1transactions~1{transaction_id}'
 
-  /orders/v1:
-    $ref: './paths/order.yaml#/paths/~1orders'
-  /orders/v1/{order_id}:
-    $ref: './paths/order.yaml#/paths/~1orders~1v1~1{order_id}'
+  /v1/orders:
+    $ref: './paths/order.yaml#/paths/~1v1~1orders'
+  /v1/orders/{order_id}:
+    $ref: './paths/order.yaml#/paths/~1v1~1orders~1{order_id}'
 
-  /marketdata/v1/symbols:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1symbols'
-  /marketdata/v1/candles:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1candles'
-  /marketdata/v1/ticks:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1ticks'
-  /marketdata/v1/orderbook/{symbol}:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1orderbook~1{symbol}'
-  /marketdata/v1/orderbook/{symbol}/history:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1orderbook~1{symbol}~1history'
-  /marketdata/v1/stream:
-    $ref: './paths/market.yaml#/paths/~1marketdata~1v1~1stream'
+  /v1/marketdata/symbols:
+    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1symbols'
+  /v1/marketdata/candles:
+    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1candles'
+  /v1/marketdata/ticks:
+    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1ticks'
+  /v1/marketdata/orderbook/{symbol}:
+    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1orderbook~1{symbol}'
+  /v1/marketdata/orderbook/{symbol}/history:
+    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1orderbook~1{symbol}~1history'
+  /v1/marketdata/stream:
+    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1stream'
 
 
 components:

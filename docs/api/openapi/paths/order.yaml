@@ -1,5 +1,5 @@
 paths:
-  /orders:
+  /v1/orders:
     post:
       summary: Create order
       tags: [Orders]
@@ -94,7 +94,7 @@ paths:
               schema:
                 $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
 
-  /orders/v1/{order_id}:
+  /v1/orders/{order_id}:
     get:
       summary: Get order by id
       tags: [Orders]
