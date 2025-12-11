@@ -1,13 +1,14 @@
 package app
 
 import (
+	"bitka/pkg/logger"
 	"bitka/pkg/middleware"
 	"bitka/services/account/internal/delivery/http"
 	"bitka/services/account/internal/domain"
 
 	"bitka/pkg/token"
+
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
@@ -16,7 +17,7 @@ func NewServer(uc domain.AccountUsecase, validator *token.Validator) *fiber.App 
 		AppName: "Bitka Account Service",
 	})
 
-	app.Use(logger.New())
+	app.Use(logger.FiberMiddleware())
 	app.Use(recover.New())
 
 	authMW := middleware.Protected(validator)

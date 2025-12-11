@@ -3,6 +3,7 @@ package app
 import (
 	"bitka/pkg/config"
 	"bitka/pkg/database"
+	"bitka/pkg/logger"
 	"bitka/pkg/token"
 	"bitka/services/auth/internal/delivery/event"
 	"bitka/services/auth/internal/delivery/http"
@@ -13,7 +14,6 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
@@ -57,7 +57,7 @@ func NewServer(cfg *config.Config) (*fiber.App, error) {
 	})
 
 	app.Use(recover.New())
-	app.Use(logger.New())
+	app.Use(logger.FiberMiddleware())
 
 	// 5. Route Mapping
 	http.MapRoutes(app, handler)
