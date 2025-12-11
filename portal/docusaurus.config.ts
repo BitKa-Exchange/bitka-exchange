@@ -55,17 +55,22 @@ const config: Config = {
         },
         items: [
           {
-            type: "doc",
-            docId: "intro",
-            position: "left",
-            label: "Tutorial",
-          },
-          { to: "/blog", label: "Blog", position: "left" },
-          {
             label: "Bitka API",
             position: "left",
             to: "/docs/category/bitka",
           },
+          {
+            label: "Auditor notes",
+            position: "left",
+            to: "/docs/audit/threat-model",
+          },
+          {
+            type: "doc",
+            docId: "intro",
+            position: "left",
+            label: "Docs Tutorial",
+          },
+          { to: "/blog", label: "Blog", position: "left" },
           {
             href: "https://github.com/Bitka-Exchange/bitka-exchange",
             label: "GitHub",
