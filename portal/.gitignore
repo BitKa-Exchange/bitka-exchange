@@ -9,6 +9,8 @@ yarn.lock
 .docusaurus
 .cache-loader
 /spec-bundles
+/docs/bitka
+/docs/openapi
 
 # Misc
 .DS_Store
