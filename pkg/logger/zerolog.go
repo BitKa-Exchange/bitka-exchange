@@ -20,6 +20,14 @@ type Config struct {
 
 // Init initializes the global logger
 func Init(cfg Config) {
+	zerolog.TimestampFieldName = "timestamp"
+	zerolog.LevelFieldName = "level"
+
+	// Force Uppercase Level (info -> INFO)
+	zerolog.LevelFieldMarshalFunc = func(l zerolog.Level) string {
+		return strings.ToUpper(l.String())
+	}
+
 	// 1. Set Level
 	level, err := zerolog.ParseLevel(strings.ToLower(cfg.LogLevel))
 	if err != nil {
