@@ -39,7 +39,7 @@ func FiberMiddleware() fiber.Handler {
 
 		// Default HTTP status
 		httpCode := c.Response().StatusCode()
-		log.Info().Err(err).Int("http_code", httpCode).Msg("Request completed")
+
 		if err != nil {
 			if httpCode == 200 { // Force 500 if error occurred but status wasn't set
 				httpCode = 500
