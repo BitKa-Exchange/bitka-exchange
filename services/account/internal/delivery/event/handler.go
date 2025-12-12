@@ -1,9 +1,9 @@
 package event
 
 import (
+	"bitka/services/account/internal/delivery/event/dto"
 	"bitka/services/account/internal/domain"
 	"encoding/json"
-	"github.com/google/uuid"
 	"log"
 	"strings"
 )
@@ -16,14 +16,8 @@ func NewHandler(uc domain.AccountUsecase) *Handler {
 	return &Handler{uc: uc}
 }
 
-type UserRegisteredEvent struct {
-	UserID   uuid.UUID `json:"user_id"`
-	Email    string    `json:"email"`
-	Username string    `json:"username"`
-}
-
 func (h *Handler) HandleUserRegistered(msg []byte) {
-	var evt UserRegisteredEvent
+	var evt dto.UserRegisteredEvent
 	if err := json.Unmarshal(msg, &evt); err != nil {
 		log.Println("Failed to unmarshal Kafka message:", err)
 		return

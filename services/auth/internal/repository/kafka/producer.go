@@ -1,11 +1,11 @@
-package event
+package kafka
 
 import (
 	"encoding/json"
 	"log"
 
+	"bitka/services/auth/internal/domain"
 	"github.com/IBM/sarama"
-	"github.com/google/uuid"
 )
 
 type Producer struct {
@@ -27,14 +27,8 @@ func NewProducer(brokers []string) (*Producer, error) {
 	return &Producer{client: producer}, nil
 }
 
-type UserRegisterEvent struct {
-	UserID   uuid.UUID `json:"user_id"`
-	Email    string    `json:"email"`
-	Username string    `json:"username"`
-}
-
 // PublishUserRegister sends the event to the Kafka topic
-func (p *Producer) PublishUserRegister(event UserRegisterEvent) error {
+func (p *Producer) PublishUserRegister(event domain.UserRegisterEvent) error {
 	regis, err := json.Marshal(event)
 	if err != nil {
 		return err

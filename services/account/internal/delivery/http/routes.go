@@ -10,5 +10,5 @@ func MapRoutes(app *fiber.App, h *AccountHandler, authMiddleware fiber.Handler) 
 	userGroup := api.Group("/users", authMiddleware)
 
 	userGroup.Get("/me", h.GetProfile)
-	userGroup.Put("/me/edit", h.UpdateProfile)
+	userGroup.Put("/me", h.UpdateProfile)
 }
