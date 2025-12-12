@@ -7,7 +7,7 @@ import (
 	"bitka/pkg/token"
 	"bitka/services/auth/internal/delivery/http"
 	"bitka/services/auth/internal/domain"
-	"bitka/services/auth/internal/repository"
+	"bitka/services/auth/internal/repository/kafka"
 	"bitka/services/auth/internal/repository/postgres"
 	"bitka/services/auth/internal/usecase"
 	"log"
@@ -42,8 +42,9 @@ func NewServer(cfg *config.Config) (*fiber.App, error) {
 
 	// 3. Layer Dependency Injection
 	repo := postgres.NewDatabaseRepo(db)
-	//broker := config.GetEnv("KAFKA_BROKER", "kafka:9092") //still a bug , fix this later
-	kafkaProducer, Err := repository.NewProducer([]string{"kafka:9092"})
+	broker := config.GetEnv("KAFKA_BROKER", "kafka:9092")
+	
+	kafkaProducer, Err := kafka.NewProducer([]string{broker})
 	if Err != nil {
 		log.Fatal("Kafka producer failed:", Err)
 	}

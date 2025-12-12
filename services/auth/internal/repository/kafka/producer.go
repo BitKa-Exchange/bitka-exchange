@@ -1,4 +1,4 @@
-package repository
+package kafka
 
 import (
 	"encoding/json"

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"bitka/services/auth/internal/domain"
-	"bitka/services/auth/internal/repository"
+	"bitka/services/auth/internal/repository/kafka"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,13 +14,13 @@ import (
 type authUsecase struct {
 	repo          domain.AuthRepository
 	tokenGen      domain.TokenGenerator
-	kafkaProducer *repository.Producer
+	kafkaProducer *kafka.Producer
 }
 
 func NewAuthUsecase(
 	repo domain.AuthRepository,
 	tg domain.TokenGenerator,
-	kp *repository.Producer,
+	kp *kafka.Producer,
 ) domain.AuthUsecase {
 	return &authUsecase{
 		repo:          repo,

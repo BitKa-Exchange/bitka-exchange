@@ -39,17 +39,17 @@ func Load(dbEnvKey string) *Config {
 		DBUser: GetEnv("DB_USER", "postgres"),
 		DBPass: GetEnv("DB_PASS", "password"),
 		// Critical Change: Look for the specific key first, then fallback to generic
-		DBName: getEnv(dbEnvKey, getEnv("DB_NAME", "bitka_auth")),
-		DBPort: getEnv("DB_PORT", "5432"),
+		DBName: GetEnv(dbEnvKey, GetEnv("DB_NAME", "bitka_auth")),
+		DBPort: GetEnv("DB_PORT", "5432"),
 
 		// Logging
-		HTTPPort: getEnv("HTTP_PORT", "3000"),
+		HTTPPort: GetEnv("HTTP_PORT", "3000"),
 		// Default to "info" if not set. Use "debug" in local .env
-		LogLevel: getEnv("LOG_LEVEL", "info"),
+		LogLevel: GetEnv("LOG_LEVEL", "info"),
 
 		// Default to "unknown" to alert if not set
-		ServiceName: getEnv("SERVICE_NAME", "unknown-service"),
-		InstanceID:  getEnv("INSTANCE_ID", hostname), // Fallback to env var if needed
+		ServiceName: GetEnv("SERVICE_NAME", "unknown-service"),
+		InstanceID:  GetEnv("INSTANCE_ID", hostname), // Fallback to env var if needed
 	}
 }
 

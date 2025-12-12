@@ -1,6 +1,7 @@
 package event
 
 import (
+	"bitka/pkg/config"
 	"log"
 	"time"
 
@@ -16,7 +17,7 @@ type Consumer struct {
 func NewKafkaConsumer(handler *Handler) *Consumer {
 	return &Consumer{
 		handler: handler,
-		brokers: []string{"kafka:9092"}, // default
+		brokers: []string{config.GetEnv("KAFKA_BROKER", "kafka:9092")},
 		topic:   "user-registered",
 	}
 }

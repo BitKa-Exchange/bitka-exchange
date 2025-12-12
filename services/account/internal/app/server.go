@@ -36,8 +36,8 @@ func NewServer(cfg *config.Config) (*Server, error) {
 
 	// 2. Token validator
 
-	jwksURL := config.GetEnv("AUTH_JWKS_URL" , "http://localhost:3000/.well-known/jwks.json")
-	
+	jwksURL := config.GetEnv("AUTH_JWKS_URL", "http://localhost:3000/.well-known/jwks.json")
+
 	validator := token.NewValidator(jwksURL)
 
 	// 3. Construct usecase
@@ -55,7 +55,7 @@ func NewServer(cfg *config.Config) (*Server, error) {
 	}, nil
 }
 
-func (s *Server) Listen(addr string) error {
+func (s *Server) Listen(HTTP_PORT string) error {
 	go s.KafkaServer.Start()
 	return s.FiberServer.Listen(":8080")
 }
