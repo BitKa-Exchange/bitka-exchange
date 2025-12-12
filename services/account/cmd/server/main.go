@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"bitka/pkg/config"
@@ -10,21 +9,34 @@ import (
 	"bitka/pkg/token"
 
 	"bitka/services/account/internal/app"
+	"bitka/services/account/internal/delivery/event"
 	"bitka/services/account/internal/domain"
 	"bitka/services/account/internal/repository"
 	"bitka/services/account/internal/usecase"
 
-	"bitka/services/account/internal/delivery/event"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	logger.Init()
+	// 1. Load Configuration
+	// We pass "ACCOUNT_DB_NAME" to look for that specific env var override
 	cfg := config.Load("ACCOUNT_DB_NAME")
 
-	if os.Getenv("DB_NAME") == "" {
-		cfg.DBName = "bitka_account"
-	}
-	// 1. Connect DB (ONLY HERE)
+	// 2. Initialize Logger
+	logger.Init(logger.Config{
+		Environment: cfg.AppEnv,
+		LogLevel:    cfg.LogLevel,
+		ServiceName: cfg.ServiceName,
+		InstanceID:  cfg.InstanceID,
+	})
+
+	log.Info().Msg("Starting Account Service...")
+
+	// 3. Log Config (Safely redacted)
+	logger.LogConfigSafe(*cfg)
+
+	// 4. Connect Database
+	// We use the values directly from cfg (defaults are handled in pkg/config)
 	db, err := database.Connect(database.Config{
 		Host:     cfg.DBHost,
 		Port:     cfg.DBPort,
@@ -34,37 +46,45 @@ func main() {
 		SSLMode:  "disable",
 	})
 	if err != nil {
-		log.Fatalf("DB connect failed: %v", err)
+		log.Fatal().Err(err).Msg("Failed to connect to database")
 	}
-	db.AutoMigrate(&domain.Profile{})
 
-	// 2. DI: Repo + Usecase
+	// AutoMigrate is fine for dev, but consider sql-migrate for prod
+	if err := db.AutoMigrate(&domain.Profile{}); err != nil {
+		log.Fatal().Err(err).Msg("Database migration failed")
+	}
+
+	// 5. Dependency Injection
 	repo := repository.NewAccountRepo(db)
 	uc := usecase.NewAccountUsecase(repo)
 
-	// 3. JWT Validator
-
+	// 6. JWT Validator
+	// This is specific to Account service, so we handle the fallback here
 	jwksURL := os.Getenv("AUTH_JWKS_URL")
 	if jwksURL == "" {
 		jwksURL = "http://localhost:3000/.well-known/jwks.json"
 	}
+	log.Info().Str("url", jwksURL).Msg("Initializing JWT Validator")
 	validator := token.NewValidator(jwksURL)
 
-	// 4. Kafka Server
-
+	// 7. Kafka Consumer Server
 	kafkaHandler := event.NewHandler(uc)
 	kafkaServer := event.NewServer(kafkaHandler)
-	go kafkaServer.Start()
 
-	// 5. HTTP Server
+	// Start Kafka in a goroutine
+	go func() {
+		log.Info().Msg("Starting Kafka Consumer...")
+		kafkaServer.Start()
 
+	}()
+
+	// 8. HTTP Server
 	httpServer := app.NewServer(uc, validator)
 
-	port := os.Getenv("HTTP_PORT")
-	if port == "" {
-		port = "3001"
-	}
+	addr := ":" + cfg.HTTPPort
+	log.Info().Str("addr", addr).Msg("HTTP Server listening")
 
-	log.Printf("Starting Account Service on :%s", port)
-	httpServer.Listen(":" + port)
+	if err := httpServer.Listen(addr); err != nil {
+		log.Fatal().Err(err).Msg("HTTP Server failed")
+	}
 }

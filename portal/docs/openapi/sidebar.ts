@@ -4,7 +4,7 @@ const sidebar: SidebarsConfig = {
   apisidebar: [
     {
       type: "doc",
-      id: "bitka/bitka-exchange-api",
+      id: "openapi/bitka-exchange-api",
     },
     {
       type: "category",
@@ -12,31 +12,31 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "bitka/login",
+          id: "openapi/login",
           label: "Login",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "bitka/register",
+          id: "openapi/register",
           label: "Register",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "bitka/refresh-access-token",
+          id: "openapi/refresh-access-token",
           label: "Refresh access token",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "bitka/logout",
+          id: "openapi/logout",
           label: "Logout",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "bitka/jwks-json-web-key-set",
+          id: "openapi/jwks-json-web-key-set",
           label: "JWKS (JSON Web Key Set)",
           className: "api-method get",
         },
@@ -48,31 +48,31 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "bitka/get-current-user-profile",
+          id: "openapi/get-current-user-profile",
           label: "Get current user profile",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/update-current-user-profile",
+          id: "openapi/update-current-user-profile",
           label: "Update current user profile",
           className: "api-method patch",
         },
         {
           type: "doc",
-          id: "bitka/get-user-profile-by-id",
+          id: "openapi/get-user-profile-by-id",
           label: "Get user profile by ID",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/update-current-user-profile",
+          id: "openapi/update-current-user-profile",
           label: "Update current user profile",
           className: "api-method patch",
         },
         {
           type: "doc",
-          id: "bitka/change-password-for-the-authenticated-user",
+          id: "openapi/change-password-for-the-authenticated-user",
           label: "Change password for the authenticated user",
           className: "api-method post",
         },
@@ -84,31 +84,31 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "bitka/list-ledger-accounts",
+          id: "openapi/list-ledger-accounts",
           label: "List ledger accounts",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/get-ledger-account-by-id",
+          id: "openapi/get-ledger-account-by-id",
           label: "Get ledger account by id",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/list-transactions",
+          id: "openapi/list-transactions",
           label: "List transactions",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/create-a-transaction-debit-credit-transfer",
+          id: "openapi/create-a-transaction-debit-credit-transfer",
           label: "Create a transaction (debit/credit/transfer)",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "bitka/get-transaction-by-id",
+          id: "openapi/get-transaction-by-id",
           label: "Get transaction by id",
           className: "api-method get",
         },
@@ -120,25 +120,25 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "bitka/create-order",
+          id: "openapi/create-order",
           label: "Create order",
           className: "api-method post",
         },
         {
           type: "doc",
-          id: "bitka/list-orders-filterable",
+          id: "openapi/list-orders-filterable",
           label: "List orders (filterable)",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/get-order-by-id",
+          id: "openapi/get-order-by-id",
           label: "Get order by id",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/cancel-order-by-id",
+          id: "openapi/cancel-order-by-id",
           label: "Cancel order by id",
           className: "api-method delete",
         },
@@ -150,37 +150,37 @@ const sidebar: SidebarsConfig = {
       items: [
         {
           type: "doc",
-          id: "bitka/list-available-symbols-market-pairs",
+          id: "openapi/list-available-symbols-market-pairs",
           label: "List available symbols (market pairs)",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/get-candles-ohlcv-for-a-symbol-and-interval-historical",
+          id: "openapi/get-candles-ohlcv-for-a-symbol-and-interval-historical",
           label: "Get candles (OHLCV) for a symbol and interval (historical)",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/get-trades-ticks-for-a-symbol-historical",
+          id: "openapi/get-trades-ticks-for-a-symbol-historical",
           label: "Get trades (ticks) for a symbol (historical)",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/orderbook-snapshot-top-n-for-a-symbol",
+          id: "openapi/orderbook-snapshot-top-n-for-a-symbol",
           label: "Orderbook snapshot (top N) for a symbol",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/historical-orderbook-deltas-snapshots-for-reconciliation",
+          id: "openapi/historical-orderbook-deltas-snapshots-for-reconciliation",
           label: "Historical orderbook deltas / snapshots for reconciliation",
           className: "api-method get",
         },
         {
           type: "doc",
-          id: "bitka/real-time-streaming-info-web-socket",
+          id: "openapi/real-time-streaming-info-web-socket",
           label: "Real-time streaming info (WebSocket)",
           className: "api-method get",
         },
