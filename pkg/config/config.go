@@ -15,6 +15,11 @@ type Config struct {
 	DBPass string
 	DBName string
 	DBPort string
+	// --- NEW FIELDS ---
+	LogLevel    string // e.g., "debug", "info", "warn"
+	ServiceName string // e.g., "auth-service"
+	HTTPPort    string // e.g., "3000"
+	InstanceID  string // The Container ID or Pod Name
 }
 
 // Load reads configuration.
@@ -22,14 +27,29 @@ type Config struct {
 func Load(dbEnvKey string) *Config {
 	loadEnvFile()
 
+	// Get Hostname (Container ID in Docker, Pod Name in K8s)
+	hostname, err := os.Hostname()
+	if err != nil {
+		hostname = "unknown"
+	}
+
 	return &Config{
 		AppEnv: GetEnv("APP_ENV", "development"),
 		DBHost: GetEnv("DB_HOST", "localhost"),
 		DBUser: GetEnv("DB_USER", "postgres"),
 		DBPass: GetEnv("DB_PASS", "password"),
 		// Critical Change: Look for the specific key first, then fallback to generic
-		DBName: GetEnv(dbEnvKey, GetEnv("DB_NAME", "bitka_auth")),
-		DBPort: GetEnv("DB_PORT", "5432"),
+		DBName: getEnv(dbEnvKey, getEnv("DB_NAME", "bitka_auth")),
+		DBPort: getEnv("DB_PORT", "5432"),
+
+		// Logging
+		HTTPPort: getEnv("HTTP_PORT", "3000"),
+		// Default to "info" if not set. Use "debug" in local .env
+		LogLevel: getEnv("LOG_LEVEL", "info"),
+
+		// Default to "unknown" to alert if not set
+		ServiceName: getEnv("SERVICE_NAME", "unknown-service"),
+		InstanceID:  getEnv("INSTANCE_ID", hostname), // Fallback to env var if needed
 	}
 }
 

@@ -1,16 +1,22 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"bitka/pkg/config"
 	"bitka/pkg/logger"
 	"bitka/services/account/internal/app"
+	"bitka/services/account/internal/delivery/event"
+	"bitka/services/account/internal/domain"
+	"bitka/services/account/internal/repository"
+	"bitka/services/account/internal/usecase"
+
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	logger.Init()
+	// 1. Load Configuration
+	// We pass "ACCOUNT_DB_NAME" to look for that specific env var override
 	cfg := config.Load("ACCOUNT_DB_NAME")
 
 	// Override DB Name for Account Service if not set in env specific to service
