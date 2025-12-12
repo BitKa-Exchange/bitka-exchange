@@ -1,17 +1,24 @@
 package event
 
 import (
-	"github.com/IBM/sarama"
 	"log"
 	"time"
+
+	"github.com/IBM/sarama"
 )
 
 type Consumer struct {
 	handler *Handler
+	brokers []string
+	topic   string
 }
 
-func NewConsumer(handler *Handler) *Consumer {
-	return &Consumer{handler: handler}
+func NewKafkaConsumer(handler *Handler) *Consumer {
+	return &Consumer{
+		handler: handler,
+		brokers: []string{"kafka:9092"}, // default
+		topic:   "user-registered",
+	}
 }
 
 func (c *Consumer) Start() {
@@ -19,16 +26,16 @@ func (c *Consumer) Start() {
 	config.Consumer.Return.Errors = true
 
 	for {
-		consumer, err := sarama.NewConsumer([]string{"kafka:9092"}, config)
+		consumer, err := sarama.NewConsumer(c.brokers, config)
 		if err != nil {
 			log.Println("Kafka not ready, retrying in 2s:", err)
 			time.Sleep(2 * time.Second)
 			continue
 		}
 
-		partition, err := consumer.ConsumePartition("user-registered", 0, sarama.OffsetNewest)
+		partition, err := consumer.ConsumePartition(c.topic, 0, sarama.OffsetNewest)
 		if err != nil {
-			log.Println("Partition consumer not ready, retrying in 2s:", err)
+			log.Println("Kafka partition not ready, retrying in 2s:", err)
 			time.Sleep(2 * time.Second)
 			consumer.Close()
 			continue
@@ -37,6 +44,7 @@ func (c *Consumer) Start() {
 		log.Println("Kafka consumer started ✓")
 		go c.listenMessages(partition)
 		go c.listenErrors(partition)
+
 		return
 	}
 }
@@ -52,6 +60,6 @@ func (c *Consumer) listenMessages(partition sarama.PartitionConsumer) {
 
 func (c *Consumer) listenErrors(partition sarama.PartitionConsumer) {
 	for err := range partition.Errors() {
-		log.Println("Kafka partition error:", err)
+		log.Println("Kafka error:", err)
 	}
 }

@@ -3,13 +3,13 @@ module bitka/services/account
 go 1.24.1
 
 require (
+	github.com/IBM/sarama v1.46.3
 	github.com/gofiber/fiber/v2 v2.52.10
 	github.com/google/uuid v1.6.0
 	gorm.io/gorm v1.31.1
 )
 
 require (
-	github.com/IBM/sarama v1.46.3 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/eapache/go-resiliency v1.7.0 // indirect

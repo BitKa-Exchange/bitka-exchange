@@ -23,13 +23,13 @@ func Load(dbEnvKey string) *Config {
 	loadEnvFile()
 
 	return &Config{
-		AppEnv: getEnv("APP_ENV", "development"),
-		DBHost: getEnv("DB_HOST", "localhost"),
-		DBUser: getEnv("DB_USER", "postgres"),
-		DBPass: getEnv("DB_PASS", "password"),
+		AppEnv: GetEnv("APP_ENV", "development"),
+		DBHost: GetEnv("DB_HOST", "localhost"),
+		DBUser: GetEnv("DB_USER", "postgres"),
+		DBPass: GetEnv("DB_PASS", "password"),
 		// Critical Change: Look for the specific key first, then fallback to generic
-		DBName: getEnv(dbEnvKey, getEnv("DB_NAME", "bitka_auth")),
-		DBPort: getEnv("DB_PORT", "5432"),
+		DBName: GetEnv(dbEnvKey, GetEnv("DB_NAME", "bitka_auth")),
+		DBPort: GetEnv("DB_PORT", "5432"),
 	}
 }
 
@@ -59,7 +59,7 @@ func loadEnvFile() {
 	}
 }
 
-func getEnv(key, fallback string) string {
+func GetEnv(key, fallback string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
 	}

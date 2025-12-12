@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
-	"bitka/services/auth/internal/delivery/event"
 	"bitka/services/auth/internal/domain"
+	"bitka/services/auth/internal/repository"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,13 +14,13 @@ import (
 type authUsecase struct {
 	repo          domain.AuthRepository
 	tokenGen      domain.TokenGenerator
-	kafkaProducer *event.Producer
+	kafkaProducer *repository.Producer
 }
 
 func NewAuthUsecase(
 	repo domain.AuthRepository,
 	tg domain.TokenGenerator,
-	kp *event.Producer,
+	kp *repository.Producer,
 ) domain.AuthUsecase {
 	return &authUsecase{
 		repo:          repo,
@@ -92,7 +92,7 @@ func (u *authUsecase) Register(email, username, password string) error {
 	if err := u.repo.CreateUser(user); err != nil {
 		return err
 	}
-	event := event.UserRegisterEvent{
+	event := domain.UserRegisterEvent{
 		UserID:   user.ID,
 		Email:    user.Email,
 		Username: user.Username,

@@ -1,28 +1,61 @@
 package app
 
 import (
-	"bitka/pkg/middleware"
+	"bitka/pkg/config"
+	"bitka/pkg/database"
+	"bitka/pkg/token"
+	"bitka/services/account/internal/delivery/event"
 	"bitka/services/account/internal/delivery/http"
 	"bitka/services/account/internal/domain"
-
-	"bitka/pkg/token"
+	"bitka/services/account/internal/repository"
+	"bitka/services/account/internal/usecase"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-func NewServer(uc domain.AccountUsecase, validator *token.Validator) *fiber.App {
-	app := fiber.New(fiber.Config{
-		AppName: "Bitka Account Service",
+type Server struct {
+	FiberServer *fiber.App
+	KafkaServer *event.KafkaServer
+}
+
+func NewServer(cfg *config.Config) (*Server, error) {
+
+	// 1. Connect DB
+	db, err := database.Connect(database.Config{
+		Host:     cfg.DBHost,
+		Port:     cfg.DBPort,
+		User:     cfg.DBUser,
+		Password: cfg.DBPass,
+		DBName:   cfg.DBName,
+		SSLMode:  "disable",
 	})
+	if err != nil {
+		return nil, err
+	}
 
-	app.Use(logger.New())
-	app.Use(recover.New())
+	db.AutoMigrate(&domain.Profile{})
 
-	authMW := middleware.Protected(validator)
-	handler := http.NewAccountHandler(uc)
+	// 2. Token validator
 
-	http.MapRoutes(app, handler, authMW)
+	jwksURL := config.GetEnv("AUTH_JWKS_URL" , "http://localhost:3000/.well-known/jwks.json")
+	
+	validator := token.NewValidator(jwksURL)
 
-	return app
+	// 3. Construct usecase
+	repo := repository.NewAccountRepo(db)
+	uc := usecase.NewAccountUsecase(repo)
+
+	// 4. Initialize Fiber
+	httpServer := http.NewFiberServer(uc, validator)
+	// 5. Initialize Kafka consumer (runs in background)
+	kafkaconsumer := event.NewKafkaServer(uc)
+
+	return &Server{
+		FiberServer: httpServer,
+		KafkaServer: kafkaconsumer,
+	}, nil
+}
+
+func (s *Server) Listen(addr string) error {
+	go s.KafkaServer.Start()
+	return s.FiberServer.Listen(":8080")
 }
