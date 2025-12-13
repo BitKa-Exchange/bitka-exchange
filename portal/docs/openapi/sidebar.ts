@@ -116,6 +116,36 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Assets",
+      items: [
+        {
+          type: "doc",
+          id: "openapi/list-supported-assets",
+          label: "List supported assets",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/create-a-new-asset-admin",
+          label: "Create a new Asset (Admin)",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "openapi/get-asset-details",
+          label: "Get asset details",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "openapi/update-existing-asset-admin",
+          label: "Update existing Asset (Admin)",
+          className: "api-method put",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "Orders",
       items: [
         {
