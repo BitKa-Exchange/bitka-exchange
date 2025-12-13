@@ -7,7 +7,7 @@ import type * as Plugin from "@docusaurus/types/src/plugin";
 import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 const config: Config = {
-  title: "BitKa - Docs",
+  title: "BitKa 0.4 - Docs",
   tagline: "We're like Bitkub but pink🩷",
   url: "https://docs.bitka.polishstack.com",
   baseUrl: "/",

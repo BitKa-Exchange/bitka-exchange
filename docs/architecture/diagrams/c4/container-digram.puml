@@ -4,7 +4,7 @@
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
 !include FONTAWESOME/users.puml
 
-title BitKa — Container Diagram v0.3 (exclude deposit/withdraw services)
+title BitKa — Container Diagram v0.4 (exclude deposit/withdraw services)
 
 Person(user, "User", "Mobile / Web user")
 
@@ -13,7 +13,7 @@ Container_Boundary(system_boundary, "BitKa"){
   Container(userUI,"User UI","Flutter App/Web", "App for traders to interact with the exchange")
 
   Container(auth, "Authentication Service","Golang Fiber - Microservice","Handle login, register, password, OAuth2, issue RS256 JWT & JWKS")
-  Container(account, "Account Service","Golang Fiber - Microservice","User profile, contact, preferences")
+  Container(user, "User Service","Golang Fiber - Microservice","User profile, contact, preferences")
   Container(ledger, "Ledger Service","Golang Fiber - Microservice","Authoritative balances, reservations, double-entry ledger")
   ' Container(deposit, "Deposit Service","Golang Fiber - Microservice","Generate deposit addresses, map address→user, accept provider notifications")
   ' Container(withdraw, "Withdraw Service","Golang Fiber - Microservice","Accept withdraw requests, create/track withdraw jobs, interface to signer/provider")
@@ -22,7 +22,7 @@ Container_Boundary(system_boundary, "BitKa"){
   Container(marketdata, "Market Data Service","Golang Fiber - Microservice","Serve orderbook, trades, ticker via REST/WS (Centrifugo the in future)")
   Container(notification, "Notification Service","Golang Fiber - Microservice","Subscribe to events and notify users (email / in-app)")
 
-  ContainerDb(db, "Database","PostgreSQL","Single PostgreSQL instance — store service data (use database per service: auth, account, ledger, deposit, withdraw, order)")
+  ContainerDb(db, "Database","PostgreSQL","Single PostgreSQL instance — store service data (use database per service: auth, user, ledger, deposit, withdraw, order)")
 
   Container(kafka,"Distributed Event Streaming","Apache Kafka (single-node)","Event-driven communication between microservices (topics: auth.*, deposit.*, withdraw.*, order.*, trade.*, ledger.*)")
 
@@ -35,7 +35,7 @@ Container_Ext(r2, "Cloudflare R2 / GCS", "Object Storage as a Service","Store av
 ' User interactions
 Rel(user, userUI, "Uses", "HTTPS / WebSocket")
 Rel(userUI, auth, "Authenticate / obtain token", "REST/HTTPS")
-Rel(userUI, account, "Manage profile", "REST/HTTPS")
+Rel(userUI, user, "Manage profile", "REST/HTTPS")
 Rel(userUI, ledger, "View balance / internal transfer", "REST/HTTPS")
 ' Rel_U(userUI, deposit, "Request deposit address", "REST/HTTPS")
 ' Rel_U(userUI, withdraw, "Request withdrawal", "REST/HTTPS")
@@ -44,7 +44,7 @@ Rel(userUI, order, "Place / cancel orders", "REST/HTTPS")
 
 ' Service interactions
 Rel(auth, kafka, "Publish auth.* events", "Kafka topic")
-Rel(account, kafka, "Publish account.* events", "Kafka topic")
+Rel(user, kafka, "Publish user.* events", "Kafka topic")
 Rel(ledger, kafka, "Publish ledger.* events", "Kafka topic")
 ' Rel(deposit, kafka, "Publish deposit.* events", "Kafka topic")
 ' Rel(withdraw, kafka, "Publish withdraw.* events", "Kafka topic")
@@ -61,7 +61,7 @@ Rel(order, ledger, "Reserve funds on order", "gRPC")
 
 ' Data persistence
 Rel(ledger, db, "Reads/Writes ledger entries", "SQL")
-Rel(account, db, "Reads/Writes user profile", "SQL")
+Rel(user, db, "Reads/Writes user profile", "SQL")
 Rel(order, db, "Reads/Writes orders & trades", "SQL")
 ' Rel(deposit, db, "Persist addresses & deposit metadata", "SQL")
 ' Rel(withdraw, db, "Persist withdraw requests & status", "SQL")
