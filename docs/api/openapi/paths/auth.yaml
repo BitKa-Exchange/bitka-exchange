@@ -8,31 +8,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas.yaml#/components/schemas/LoginRequest'
+              $ref: "../components/schemas.yaml#/components/schemas/LoginRequest"
       responses:
-        '200':
+        "200":
           description: Successful authentication
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas.yaml#/components/schemas/TokenResponse'
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '401':
+                        $ref: "../components/schemas.yaml#/components/schemas/TokenResponse"
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+                $ref: "../components/schemas.yaml#/components/schemas/ErrorEnvelope"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/auth/register:
     post:
@@ -43,15 +41,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas.yaml#/components/schemas/RegisterRequest'
+              $ref: "../components/schemas.yaml#/components/schemas/RegisterRequest"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
@@ -60,20 +58,12 @@ paths:
                           user_id:
                             type: string
                             format: uuid
-        '400':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '409':
-          description: Conflict (e.g. email exists)
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "409":
+          $ref: "../components/responses.yaml#/components/responses/Conflict"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/auth/refresh:
     post:
@@ -90,25 +80,25 @@ paths:
                   type: string
               required: [refresh_token]
       responses:
-        '200':
+        "200":
           description: Tokens refreshed
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas.yaml#/components/schemas/TokenResponse'
-        '401':
-          description: Invalid refresh token
+                        $ref: "../components/schemas.yaml#/components/schemas/TokenResponse"
+        "401":
+          description: Invalid or expired refresh token
           content:
             application/json:
               schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                $ref: "../components/schemas.yaml#/components/schemas/ErrorEnvelope"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/auth/logout:
     post:
@@ -118,27 +108,23 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '204':
-          description: No Content (logout successful)
-          content: 
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
-                  - type: object
-                    properties:
-                      data:
-                        nullable: true
-                        description: "No data on logout"
-
-        '401':
-          description: Unauthorized
+        "200":
+          description: Logout successful
           content:
             application/json:
               schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                allOf:
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        nullable: true
+                        description: "No data on logout"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /.well-known/jwks.json:
     get:
@@ -146,11 +132,11 @@ paths:
       description: Retrieve the JSON Web Key Set for verifying JWTs used by the API server
       tags: [Auth]
       responses:
-        '200':
+        "200":
           description: JWKS
           content:
             application/json:
               schema:
                 type: object
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"

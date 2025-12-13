@@ -1,12 +1,113 @@
 components:
   responses:
+    # --- 400 Bad Request ---
+    BadRequest:
+      description: Invalid Input
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: INVALID_INPUT
+                      message:
+                        type: string
+                        example: "The request parameters are invalid."
+
+    # --- 401 Unauthorized ---
+    Unauthorized:
+      description: Unauthorized (Token missing or invalid)
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: UNAUTHORIZED
+                      message:
+                        type: string
+                        example: "Authentication is required to access this resource."
+
+    # --- 403 Forbidden ---
+    Forbidden:
+      description: Forbidden (User does not have permission)
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: FORBIDDEN
+                      message:
+                        type: string
+                        example: "You do not have permission to perform this action."
+
+    # --- 404 Not Found ---
+    NotFound:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: NOT_FOUND
+                      message:
+                        type: string
+                        example: "The requested resource was not found."
+
+    # --- 409 Conflict ---
+    Conflict:
+      description: Resource Conflict (Duplicate or State Issue)
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: CONFLICT
+                      message:
+                        type: string
+                        example: "Resource already exists or request conflicts with current state."
+
+    # --- 500 Internal Server Error ---
     InternalServerError:
       description: Internal Server Error
       content:
         application/json:
           schema:
             allOf:
-              - $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+              - $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
               - type: object
                 properties:
                   error:

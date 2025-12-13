@@ -5,10 +5,10 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+            $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
     OrderNotFound:
       description: Order not found
       content:
         application/json:
           schema:
-            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+            $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"

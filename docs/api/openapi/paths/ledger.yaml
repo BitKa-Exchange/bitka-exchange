@@ -1,4 +1,136 @@
 paths:
+  # --- ASSET MANAGEMENT ---
+  /v1/ledger/assets:
+    get:
+      summary: List supported assets
+      tags: [Assets]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: active_only
+          in: query
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "../components/ledger_schemas.yaml#/components/schemas/Asset"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
+
+    post:
+      summary: Create a new Asset (Admin)
+      tags: [Assets]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../components/ledger_schemas.yaml#/components/schemas/CreateAssetRequest"
+      responses:
+        "201":
+          description: Asset Created Successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/Asset"
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "403":
+          $ref: "../components/responses.yaml#/components/responses/Forbidden"
+        "409":
+          $ref: "../components/responses.yaml#/components/responses/Conflict"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
+
+  /v1/ledger/assets/{symbol}:
+    get:
+      summary: Get asset details
+      tags: [Assets]
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Asset Details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/Asset"
+        "404":
+          $ref: "../components/responses.yaml#/components/responses/NotFound"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
+
+    put:
+      summary: Update existing Asset (Admin)
+      tags: [Assets]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../components/ledger_schemas.yaml#/components/schemas/UpdateAssetRequest"
+      responses:
+        "200":
+          description: Asset Updated Successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/Asset"
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "403":
+          $ref: "../components/responses.yaml#/components/responses/Forbidden"
+        "404":
+          $ref: "../components/responses.yaml#/components/responses/NotFound"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
+
+  # --- ACCOUNT MANAGEMENT ---
   /v1/ledger/accounts:
     get:
       summary: List ledger accounts
@@ -27,25 +159,21 @@ paths:
             type: string
             example: "BTC"
       responses:
-        '200':
+        "200":
           description: Account list
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/ledger_schemas.yaml#/components/schemas/AccountList'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/AccountList"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/ledger/accounts/{account_id}:
     get:
@@ -61,32 +189,25 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Account
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/ledger_schemas.yaml#/components/schemas/LedgerAccount'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/LedgerAccount"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/responses.yaml#/components/responses/NotFound"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
+  # --- TRANSACTION MANAGEMENT ---
   /v1/ledger/transactions:
     get:
       summary: List transactions
@@ -117,7 +238,7 @@ paths:
         - name: status
           in: query
           schema:
-            $ref: '../components/ledger_schemas.yaml#/components/schemas/TransactionStatus'
+            $ref: "../components/ledger_schemas.yaml#/components/schemas/TransactionStatus"
         - name: from
           in: query
           schema:
@@ -129,25 +250,21 @@ paths:
             type: string
             format: date-time
       responses:
-        '200':
+        "200":
           description: Transaction list
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/ledger_schemas.yaml#/components/schemas/TransactionList'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/TransactionList"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
     post:
       summary: Create a transaction (debit/credit/transfer)
@@ -167,39 +284,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/ledger_schemas.yaml#/components/schemas/CreateTransactionRequest'
+              $ref: "../components/ledger_schemas.yaml#/components/schemas/CreateTransactionRequest"
       responses:
-        '201':
+        "201":
           description: Transaction created
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/ledger_schemas.yaml#/components/schemas/CreateTransactionResponse'
-        '400':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '409':
-          description: Conflict creating transaction (idempotency or business rule)
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/CreateTransactionResponse"
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "409":
+          $ref: "../components/responses.yaml#/components/responses/Conflict"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/ledger/transactions/{transaction_id}:
     get:
@@ -215,28 +320,20 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Transaction
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/ledger_schemas.yaml#/components/schemas/LedgerTransaction'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                        $ref: "../components/ledger_schemas.yaml#/components/schemas/LedgerTransaction"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/responses.yaml#/components/responses/NotFound"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"

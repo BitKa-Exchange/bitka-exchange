@@ -29,9 +29,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/LedgerAccount'
+            $ref: "#/components/schemas/LedgerAccount"
         pagination:
-          $ref: './schemas.yaml#/components/schemas/Pagination'
+          $ref: "./schemas.yaml#/components/schemas/Pagination"
 
     TransactionStatus:
       type: string
@@ -55,7 +55,7 @@ components:
           type: string
           format: uuid
         type:
-          $ref: '#/components/schemas/TransactionType'
+          $ref: "#/components/schemas/TransactionType"
         amount:
           type: string
           description: "Decimal amount as string"
@@ -63,7 +63,7 @@ components:
           type: string
           example: "BTC"
         status:
-          $ref: '#/components/schemas/TransactionStatus'
+          $ref: "#/components/schemas/TransactionStatus"
         description:
           type: string
           nullable: true
@@ -85,9 +85,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/LedgerTransaction'
+            $ref: "#/components/schemas/LedgerTransaction"
         pagination:
-          $ref: './schemas.yaml#/components/schemas/Pagination'
+          $ref: "./schemas.yaml#/components/schemas/Pagination"
 
     CreateTransactionRequest:
       type: object
@@ -139,3 +139,69 @@ components:
         locked:
           type: string
       required: [account_id, asset, available, locked]
+
+    Asset:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "BTC"
+        name:
+          type: string
+          example: "Bitcoin"
+        type:
+          type: string
+          enum: [CRYPTO, FIAT]
+        decimals:
+          type: integer
+          example: 8
+        icon_url:
+          type: string
+          format: uri
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+      required: [symbol, name, type, decimals, is_active]
+
+    # POST /assets (Symbol is required)
+    CreateAssetRequest:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "BTC"
+          pattern: "^[A-Z0-9]{2,10}$"
+        name:
+          type: string
+          example: "Bitcoin"
+        type:
+          type: string
+          enum: [CRYPTO, FIAT]
+        decimals:
+          type: integer
+          minimum: 0
+          maximum: 18
+          default: 8
+        icon_url:
+          type: string
+          format: uri
+        is_active:
+          type: boolean
+          default: true
+      required: [symbol, name, type]
+
+    # PUT /assets/{symbol} (Symbol is in URL, not Body)
+    UpdateAssetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        decimals:
+          type: integer
+        icon_url:
+          type: string
+        is_active:
+          type: boolean
+      required: [name, decimals, icon_url, is_active]

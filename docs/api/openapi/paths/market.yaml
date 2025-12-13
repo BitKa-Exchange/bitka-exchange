@@ -21,23 +21,21 @@ paths:
           schema:
             type: boolean
       responses:
-        '200':
+        "200":
           description: Symbol list
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/market_schemas.yaml#/components/schemas/SymbolList'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+                        $ref: "../components/market_schemas.yaml#/components/schemas/SymbolList"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/marketdata/candles:
     get:
@@ -75,38 +73,32 @@ paths:
             type: integer
             default: 100
       responses:
-        '200':
+        "200":
           description: Candle series
           headers:
             Cache-Control:
-              description: 'Cache policy for historical data (set by API)'
+              description: "Cache policy for historical data (set by API)"
               schema:
                 type: string
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/market_schemas.yaml#/components/schemas/CandleSeries'
-        '400':
-          description: Invalid parameters
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '404':
-          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
-        '429':
-          $ref: '../components/market_responses.yaml#/components/responses/RateLimited'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+                        $ref: "../components/market_schemas.yaml#/components/schemas/CandleSeries"
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/market_responses.yaml#/components/responses/BadSymbol"
+        "429":
+          $ref: "../components/market_responses.yaml#/components/responses/RateLimited"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/marketdata/ticks:
     get:
@@ -136,27 +128,27 @@ paths:
             type: integer
             default: 500
       responses:
-        '200':
+        "200":
           description: Trade list
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/market_schemas.yaml#/components/schemas/TickList'
-        '404':
-          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
-        '429':
-          $ref: '../components/market_responses.yaml#/components/responses/RateLimited'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+                        $ref: "../components/market_schemas.yaml#/components/schemas/TickList"
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/market_responses.yaml#/components/responses/BadSymbol"
+        "429":
+          $ref: "../components/market_responses.yaml#/components/responses/RateLimited"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/marketdata/orderbook/{symbol}:
     get:
@@ -176,25 +168,23 @@ paths:
             type: integer
             default: 20
       responses:
-        '200':
+        "200":
           description: Orderbook snapshot
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/market_schemas.yaml#/components/schemas/OrderbookSnapshot'
-        '404':
-          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+                        $ref: "../components/market_schemas.yaml#/components/schemas/OrderbookSnapshot"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/market_responses.yaml#/components/responses/BadSymbol"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/marketdata/orderbook/{symbol}/history:
     get:
@@ -224,13 +214,13 @@ paths:
             type: integer
             default: 100
       responses:
-        '200':
-          description: Orderbook history (list of snapshots or updates)
+        "200":
+          description: Orderbook history
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
@@ -239,68 +229,21 @@ paths:
                           snapshots:
                             type: array
                             items:
-                              $ref: '../components/market_schemas.yaml#/components/schemas/OrderbookSnapshot'
+                              $ref: "../components/market_schemas.yaml#/components/schemas/OrderbookSnapshot"
                           updates:
                             type: array
                             items:
-                              $ref: '../components/market_schemas.yaml#/components/schemas/OrderbookUpdate'
-        '404':
-          $ref: '../components/market_responses.yaml#/components/responses/BadSymbol'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+                              $ref: "../components/market_schemas.yaml#/components/schemas/OrderbookUpdate"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/market_responses.yaml#/components/responses/BadSymbol"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/marketdata/stream:
     get:
       summary: Real-time streaming info (WebSocket)
       tags: [MarketData]
       description: >
-        This endpoint is the real-time streaming by WebSocket protocol, which isn't designed for OpenAPI documentation. The API Contract would come after.
-
-      # responses:
-      #   '200':
-      #     description: Real-time streaming protocol documentation
-      #     content:
-      #       application/json:
-      #         schema:
-      #           type: object
-      #           properties:
-      #             protocols:
-      #               type: array
-      #               items:
-      #                 type: string
-      #               example: ["websocket", "sse"]
-      #             websocket:
-      #               type: object
-      #               properties:
-      #                 url:
-      #                   type: string
-      #                   example: "wss://api.example.com/stream?token=<JWT>"
-      #                 auth:
-      #                   type: string
-      #                   description: "Pass JWT as query param `token` or in Sec-WebSocket-Protocol header"
-      #                 subscribe_example:
-      #                   type: object
-      #                   example:
-      #                     action: "subscribe"
-      #                     channel: "candles"
-      #                     symbol: "BTC-THB"
-      #                     interval: "1m"
-      #             sse:
-      #               type: object
-      #               properties:
-      #                 url:
-      #                   type: string
-      #                   example: "https://api.example.com/stream/sse?token=<JWT>"
-      #                 notes:
-      #                   type: string
-      #                   example: "SSE connections are HTTP GET; the server sends event: message lines"
-      #   '401':
-      #     description: Unauthorized
-      #     content:
-      #       application/json:
-      #         schema:
-      #           $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
+        This endpoint is the real-time streaming by WebSocket protocol.

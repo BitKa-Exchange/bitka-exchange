@@ -19,9 +19,9 @@ components:
           type: string
           example: "BTC-THB"
         side:
-          $ref: '#/components/schemas/OrderSide'
+          $ref: "#/components/schemas/OrderSide"
         type:
-          $ref: '#/components/schemas/OrderType'
+          $ref: "#/components/schemas/OrderType"
         price:
           type: string
           description: "Decimal price as string (required for limit orders)"
@@ -29,7 +29,7 @@ components:
           type: string
           description: "Decimal quantity as string"
         time_in_force:
-          $ref: '#/components/schemas/TimeInForce'
+          $ref: "#/components/schemas/TimeInForce"
         post_only:
           type: boolean
           description: "Reject if would match immediately"
@@ -80,9 +80,9 @@ components:
         symbol:
           type: string
         side:
-          $ref: '#/components/schemas/OrderSide'
+          $ref: "#/components/schemas/OrderSide"
         type:
-          $ref: '#/components/schemas/OrderType'
+          $ref: "#/components/schemas/OrderType"
         price:
           type: string
           nullable: true
@@ -104,7 +104,7 @@ components:
         fills:
           type: array
           items:
-            $ref: '#/components/schemas/OrderFill'
+            $ref: "#/components/schemas/OrderFill"
         metadata:
           type: object
           additionalProperties: true
@@ -116,9 +116,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Order'
+            $ref: "#/components/schemas/Order"
         pagination:
-          $ref: './schemas.yaml#/components/schemas/Pagination'
+          $ref: "./schemas.yaml#/components/schemas/Pagination"
 
     CancelOrderRequest:
       type: object

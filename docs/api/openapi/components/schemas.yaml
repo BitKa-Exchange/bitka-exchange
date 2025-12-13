@@ -7,14 +7,14 @@ components:
           type: boolean
         data:
         error:
-          $ref: '#/components/schemas/ErrorDetail'
+          $ref: "#/components/schemas/ErrorDetail"
         meta:
-          $ref: '#/components/schemas/Meta'
+          $ref: "#/components/schemas/Meta"
       required: [success, meta]
 
     SuccessEnvelope:
       allOf:
-        - $ref: '#/components/schemas/APIEnvelope'
+        - $ref: "#/components/schemas/APIEnvelope"
         - type: object
           required: [success, data]
           properties:
@@ -27,7 +27,7 @@ components:
 
     ErrorEnvelope:
       allOf:
-        - $ref: '#/components/schemas/APIEnvelope'
+        - $ref: "#/components/schemas/APIEnvelope"
         - type: object
           required: [success, error]
           properties:
@@ -37,7 +37,7 @@ components:
             data:
               nullable: true
               description: "Should be null or omitted on error"
-    
+
     ErrorDetail:
       type: object
       properties:
@@ -47,7 +47,7 @@ components:
         message:
           type: string
         details:
-          type: object 
+          type: object
         instance:
           type: string
       required: [code, message, instance]

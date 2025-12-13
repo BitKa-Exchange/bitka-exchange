@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: BitKa Exchange API
-  version: "0.3.0"
+  version: "0.4.0"
   description: |
     BitKa Exchange public API.
 
@@ -148,56 +148,59 @@ servers:
 
 paths:
   /v1/auth/login:
-    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1login'
+    $ref: "./paths/auth.yaml#/paths/~1v1~1auth~1login"
   /v1/auth/register:
-    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1register'
+    $ref: "./paths/auth.yaml#/paths/~1v1~1auth~1register"
   /v1/auth/refresh:
-    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1refresh'
+    $ref: "./paths/auth.yaml#/paths/~1v1~1auth~1refresh"
   /v1/auth/logout:
-    $ref: './paths/auth.yaml#/paths/~1v1~1auth~1logout'
+    $ref: "./paths/auth.yaml#/paths/~1v1~1auth~1logout"
   /v1/.well-known/jwks.json:
-    $ref: './paths/auth.yaml#/paths/~1.well-known~1jwks.json'
+    $ref: "./paths/auth.yaml#/paths/~1.well-known~1jwks.json"
 
   /v1/users/me:
-    $ref: './paths/user.yaml#/paths/~1v1~1users~1me'
+    $ref: "./paths/user.yaml#/paths/~1v1~1users~1me"
   /v1/users/{id}:
-    $ref: './paths/user.yaml#/paths/~1v1~1users~1{id}'
+    $ref: "./paths/user.yaml#/paths/~1v1~1users~1{id}"
   /v1/users/me/change-password:
-    $ref: './paths/user.yaml#/paths/~1v1~1users~1me~1change-password'
+    $ref: "./paths/user.yaml#/paths/~1v1~1users~1me~1change-password"
 
   /v1/ledger/accounts:
-    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1accounts'
+    $ref: "./paths/ledger.yaml#/paths/~1v1~1ledger~1accounts"
   /v1/ledger/accounts/{account_id}:
-    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1accounts~1{account_id}'
+    $ref: "./paths/ledger.yaml#/paths/~1v1~1ledger~1accounts~1{account_id}"
   /v1/ledger/transactions:
-    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1transactions'
+    $ref: "./paths/ledger.yaml#/paths/~1v1~1ledger~1transactions"
   /v1/ledger/transactions/{transaction_id}:
-    $ref: './paths/ledger.yaml#/paths/~1v1~1ledger~1transactions~1{transaction_id}'
+    $ref: "./paths/ledger.yaml#/paths/~1v1~1ledger~1transactions~1{transaction_id}"
+  /v1/ledger/assets:
+    $ref: "./paths/ledger.yaml#/paths/~1v1~1ledger~1assets"
+  /v1/ledger/assets/{symbol}:
+    $ref: "./paths/ledger.yaml#/paths/~1v1~1ledger~1assets~1{symbol}"
 
   /v1/orders:
-    $ref: './paths/order.yaml#/paths/~1v1~1orders'
+    $ref: "./paths/order.yaml#/paths/~1v1~1orders"
   /v1/orders/{order_id}:
-    $ref: './paths/order.yaml#/paths/~1v1~1orders~1{order_id}'
+    $ref: "./paths/order.yaml#/paths/~1v1~1orders~1{order_id}"
 
   /v1/marketdata/symbols:
-    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1symbols'
+    $ref: "./paths/market.yaml#/paths/~1v1~1marketdata~1symbols"
   /v1/marketdata/candles:
-    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1candles'
+    $ref: "./paths/market.yaml#/paths/~1v1~1marketdata~1candles"
   /v1/marketdata/ticks:
-    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1ticks'
+    $ref: "./paths/market.yaml#/paths/~1v1~1marketdata~1ticks"
   /v1/marketdata/orderbook/{symbol}:
-    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1orderbook~1{symbol}'
+    $ref: "./paths/market.yaml#/paths/~1v1~1marketdata~1orderbook~1{symbol}"
   /v1/marketdata/orderbook/{symbol}/history:
-    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1orderbook~1{symbol}~1history'
+    $ref: "./paths/market.yaml#/paths/~1v1~1marketdata~1orderbook~1{symbol}~1history"
   /v1/marketdata/stream:
-    $ref: './paths/market.yaml#/paths/~1v1~1marketdata~1stream'
-
+    $ref: "./paths/market.yaml#/paths/~1v1~1marketdata~1stream"
 
 components:
   schemas:
-    $ref: './components/schemas.yaml#/components/schemas'
+    $ref: "./components/schemas.yaml#/components/schemas"
   securitySchemes:
-    $ref: './components/security.yaml#/components/securitySchemes'
+    $ref: "./components/security.yaml#/components/securitySchemes"
 
 security:
   - bearerAuth: []

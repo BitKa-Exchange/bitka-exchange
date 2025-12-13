@@ -6,25 +6,21 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: User profile
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas.yaml#/components/schemas/UserProfile'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                        $ref: "../components/schemas.yaml#/components/schemas/UserProfile"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
     patch:
       summary: Update current user profile
@@ -36,15 +32,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas.yaml#/components/schemas/UpdateProfileRequest'
+              $ref: "../components/schemas.yaml#/components/schemas/UpdateProfileRequest"
       responses:
-        '200':
+        "200":
           description: Profile updated
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
@@ -52,14 +48,12 @@ paths:
                         properties:
                           message:
                             type: string
-        '400':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/users/{id}:
     get:
@@ -75,32 +69,23 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: User profile
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas.yaml#/components/schemas/UserProfile'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
-
+                        $ref: "../components/schemas.yaml#/components/schemas/UserProfile"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "404":
+          $ref: "../components/responses.yaml#/components/responses/NotFound"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
     patch:
       summary: Update current user profile
       tags: [Users]
@@ -111,27 +96,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas.yaml#/components/schemas/UpdateProfileRequest'
+              $ref: "../components/schemas.yaml#/components/schemas/UpdateProfileRequest"
       responses:
-        '200':
+        "200":
           description: Profile updated
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
-                        $ref: '../components/schemas.yaml#/components/schemas/UserProfile'
-        '400':
+                        $ref: "../components/schemas.yaml#/components/schemas/UserProfile"
+        "400":
           description: Validation error
           content:
             application/json:
               schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+                $ref: "../components/schemas.yaml#/components/schemas/ErrorEnvelope"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"
 
   /v1/users/me/change-password:
     post:
@@ -144,25 +129,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '../components/schemas.yaml#/components/schemas/ChangePasswordRequest'
+              $ref: "../components/schemas.yaml#/components/schemas/ChangePasswordRequest"
       responses:
-        '200':
+        "200":
           description: Password changed
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '../components/schemas.yaml#/components/schemas/SuccessEnvelope'
+                  - $ref: "../components/schemas.yaml#/components/schemas/SuccessEnvelope"
                   - type: object
                     properties:
                       data:
                         nullable: true
                         description: "No data on password change"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../components/schemas.yaml#/components/schemas/ErrorEnvelope'
-        '500':
-          $ref: '../components/responses.yaml#/components/responses/InternalServerError'
+        "400":
+          $ref: "../components/responses.yaml#/components/responses/BadRequest"
+        "401":
+          $ref: "../components/responses.yaml#/components/responses/Unauthorized"
+        "500":
+          $ref: "../components/responses.yaml#/components/responses/InternalServerError"

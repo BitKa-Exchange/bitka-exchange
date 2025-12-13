@@ -38,9 +38,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Candle'
+            $ref: "#/components/schemas/Candle"
         pagination:
-          $ref: './schemas.yaml#/components/schemas/Pagination'
+          $ref: "./schemas.yaml#/components/schemas/Pagination"
 
     Tick:
       type: object
@@ -67,9 +67,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Tick'
+            $ref: "#/components/schemas/Tick"
         pagination:
-          $ref: './schemas.yaml#/components/schemas/Pagination'
+          $ref: "./schemas.yaml#/components/schemas/Pagination"
 
     OrderbookEntry:
       type: object
@@ -91,11 +91,11 @@ components:
         bids:
           type: array
           items:
-            $ref: '#/components/schemas/OrderbookEntry'
+            $ref: "#/components/schemas/OrderbookEntry"
         asks:
           type: array
           items:
-            $ref: '#/components/schemas/OrderbookEntry'
+            $ref: "#/components/schemas/OrderbookEntry"
         timestamp:
           type: string
           format: date-time
@@ -144,4 +144,4 @@ components:
               active:
                 type: boolean
         pagination:
-          $ref: './schemas.yaml#/components/schemas/Pagination'
+          $ref: "./schemas.yaml#/components/schemas/Pagination"

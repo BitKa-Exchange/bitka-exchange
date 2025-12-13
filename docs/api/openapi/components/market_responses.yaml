@@ -5,11 +5,11 @@ components:
       content:
         application/json:
           schema:
-            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+            $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
 
     RateLimited:
       description: Rate limited
       content:
         application/json:
           schema:
-            $ref: './schemas.yaml#/components/schemas/ErrorEnvelope'
+            $ref: "./schemas.yaml#/components/schemas/ErrorEnvelope"
