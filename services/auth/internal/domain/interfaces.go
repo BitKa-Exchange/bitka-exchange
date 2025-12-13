@@ -14,7 +14,7 @@ type AuthRepository interface {
 // AuthUsecase defines business logic methods
 type AuthUsecase interface {
 	Login(email, password string) (*TokenPair, error)
-	Register(email,username,password string) error
+	Register(email, username, password string) error
 	GetJWKS() ([]byte, error)
 }
 

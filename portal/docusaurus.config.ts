@@ -55,6 +55,11 @@ const config: Config = {
         },
         items: [
           {
+            label: "Dev Guides",
+            position: "left",
+            to: "/docs/developer-guide",
+          },
+          {
             type: "doc",
             docId: "intro",
             position: "left",
@@ -64,7 +69,7 @@ const config: Config = {
           {
             label: "Bitka API",
             position: "left",
-            to: "/docs/category/bitka",
+            to: "/docs/openapi",
           },
           {
             href: "https://github.com/Bitka-Exchange/bitka-exchange",
@@ -180,7 +185,7 @@ const config: Config = {
         config: {
           petstore: {
             specPath: "../docs/api/openapi/openapi.yaml",
-            outputDir: "docs/bitka",
+            outputDir: "docs/openapi",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
