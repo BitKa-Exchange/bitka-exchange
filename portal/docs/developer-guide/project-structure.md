@@ -3,7 +3,6 @@ sidebar_label: Project Structure
 sidebar_position: 2
 ---
 
-
 # Project Structure
 
 ```plaintext
@@ -45,40 +44,47 @@ bitka/
 │           ├── wallet.yaml              # /wallet (balance, transfers)
 │           └── (other paths)
 │
-├── pkg/                       # Shared, reusable libraries
-│   ├── go.mod                 # Module bitka/pkg
-│   ├── config/                # Shared config loader (env → struct) and helpers
-│   ├── database/              # DB utilities (gorm, pgx, etc.)
-│   ├── logger/                # Zerolog setup (standard logger)
-│   ├── middleware/            # Auth middleware usable by services
-│   ├── response/              # Standard API response wrapper
-│   └── token/                 # JWT & JWX utilities
+├── pkg/                                 # Shared, reusable libraries
+│   ├── go.mod                           # Module bitka/pkg
+│   ├── config/                          # Shared config loader (env → struct) and helpers
+│   ├── database/                        # DB utilities (gorm, pgx, etc.)
+│   ├── logger/                          # Zerolog setup (standard logger)
+│   ├── middleware/                      # Auth middleware usable by services
+│   ├── response/                        # Standard API response wrapper
+│   └── token/                           # JWT & JWX utilities
 │       ├── jwx_manager.go
 │       ├── model.go
 │       └── validator.go
 │
-├── services/                  # All microservices
-│   ├── Dockerfile.auth        # Dockerfile for auth service
-│   ├── Dockerfile.(other)     # (other services)
-│   ├── auth/                  # (Example shown; other services follow same structure)
-│   │   ├── go.mod             # module bitka/services/auth
+├── services/                            # All microservices
+│   ├── Dockerfile.auth                  # Dockerfile for auth service
+│   ├── Dockerfile.(other)               # (other services)
+│   ├── auth/                            # (Example shown; other services follow same structure)
+│   │   ├── go.mod                       # module bitka/services/auth
 │   │   ├── cmd/server/
-│   │   │   └── main.go        # service entrypoint
-│   │   └── internal/          # Clean Architecture layout
-│   │       ├── app/           # App bootstrap (server creation, DI)
+│   │   │   └── main.go                  # service entrypoint
+│   │   └── internal/                    # Clean Architecture layout
+│   │       ├── app/                     # App bootstrap (server creation, DI)
 │   │       │   └── server.go
-│   │       ├── domain/        # Business entities + interfaces
-│   │       ├── repository/    # Remote source implementations
-│   │       ├── usecase/       # Application logic (interactors)
-│   │       └── delivery/      # HTTP DTO, routing, handlers / GRPC / events
+│   │       ├── domain/                  # Business entities + interfaces
+│   │       │   ├── interfaces.go        # Repository & usecase interfaces
+│   │       │   ├── token.go
+│   │       │   └── user.go
+│   │       ├── repository/              # Remote source implementations
+│   │       │   ├── kafka/
+│   │       │   └── postgres/
+│   │       ├── usecase/                 # Application logic (interactors)
+│   │       └── delivery/                # HTTP DTO, routing, handlers / GRPC / events
 │   │           └── http/
-│   │               └── handler.go
+│   │               ├── dto/
+│   │               ├── handler.go
+│   │               └── route.go
 │   │
 │   ├── account/
-│   ├── outbox/                # Outbox pattern service
+│   ├── outbox/                          # Outbox pattern service
 │   └── (other services planned: ledger, order, matcher, marketdata, deposit, withdraw, notify...)
 │
-└── tools/ (optional in future) # Scripts, linters, generators
-    ├── lint.sh                 # Run all linters
-    └── generate.sh             # Code generation scripts
+└── tools/ (optional in future)          # Scripts, linters, generators
+    ├── lint.sh                          # Run all linters
+    └── generate.sh                      # Code generation scripts
 ```
