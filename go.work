@@ -5,4 +5,5 @@ use (
 	./pkg
 	./services/account
 	./services/auth
+	./services/ledger
 )
