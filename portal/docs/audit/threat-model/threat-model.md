@@ -12,9 +12,10 @@ External dependencies are items outside of the application code.
 
 | ID | Description |
 | :--- | :--- |
-| 1 | Bitka and its database is running on a Linux server running Ubuntu. |
-| 2 | BitKa's cloud storage is on Cloudflare R2 / Google Cloud Storage (GCS). |
-| 3 | MailGun is used to send out notifications to users. |
+| 1 | Bitka and its database on premise instance is running on a Linux server running Ubuntu. |
+| 2 | Bitka and its database on cloud instance is running on a Google Cloud Platform. |
+| 3 | BitKa's cloud storage is on Google Cloud Storage. |
+| 4 | MailGun is used to send out notifications to users. |
 
 ---
 
@@ -51,7 +52,7 @@ Entry points are the interfaces in which the user can feed data into the system.
 | 2.1.3 | POST `https://api.bitka.polishstack.com/v1/auth/refresh` | Refresh access token  | (3) Authorize user  |
 | 2.1.4 | POST `https://api.bitka.polishstack.com/v1/auth/logout` | Logout  | (3) Authorize user  |
 | 2.1.5 | GET `https://api.bitka.polishstack.com/v1/.well-known/jwks.json` | JWKS (JSON Web Key Set)  | (2) Anonymous user  |
-| 2.2 | Account service | Provides access to user data, profile management, and security management. | (4) Application layer services  |
+| 2.2 | User service | Provides access to user data, profile management, and security management. | (4) Application layer services  |
 | 2.2.1 | GET `https://api.bitka.polishstack.com/v1/users/me` | Get current user profile. | (3) Authorize user  |
 | 2.2.2 | PATCH `https://api.bitka.polishstack.com/v1/users/me` | Update current user profile. | (3) Authorize user  |
 | 2.2.3 | GET `https://api.bitka.polishstack.com/v1/users/:id` | Get user profile by ID. | (3) Authorize user  |
