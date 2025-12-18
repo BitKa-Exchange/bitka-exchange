@@ -13,4 +13,5 @@ Other pages you may want to check:
 - [Project Conventions](/docs/developer-guide/conventions)
 - [Logging Guideline](/docs/developer-guide/logging)
 - [API Documentation](/docs/openapi)
+- [Audit Reports (bonus)](/docs/audit/threat-model)
 
