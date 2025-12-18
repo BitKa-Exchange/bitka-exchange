@@ -2,31 +2,41 @@ package usecase
 
 import (
 	"errors"
+	"log"
 	"time"
-	
 
 	"bitka/services/auth/internal/domain"
-	"golang.org/x/crypto/bcrypt"
+	"bitka/services/auth/internal/repository/kafka"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type authUsecase struct {
-	repo     domain.AuthRepository
-	tokenGen domain.TokenGenerator
+	repo          domain.AuthRepository
+	tokenGen      domain.TokenGenerator
+	kafkaProducer *kafka.Producer
 }
 
-func NewAuthUsecase(repo domain.AuthRepository, tg domain.TokenGenerator) domain.AuthUsecase {
-	return &authUsecase{repo: repo, tokenGen: tg}
+func NewAuthUsecase(
+	repo domain.AuthRepository,
+	tg domain.TokenGenerator,
+	kp *kafka.Producer,
+) domain.AuthUsecase {
+	return &authUsecase{
+		repo:          repo,
+		tokenGen:      tg,
+		kafkaProducer: kp,
+	}
 }
 
 func hashPassword(password string) (string, error) {
-    bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-    return string(bytes), err
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err
 }
 
 func checkPassword(password, hash string) bool {
-    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-    return err == nil
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func (u *authUsecase) Login(identifier, password string) (*domain.TokenPair, error) {
@@ -35,7 +45,7 @@ func (u *authUsecase) Login(identifier, password string) (*domain.TokenPair, err
 		return nil, errors.New("invalid credentials")
 	}
 
-	if !checkPassword(password, user.PasswordHash)  {
+	if !checkPassword(password, user.PasswordHash) {
 		return nil, errors.New("invalid credentials")
 	}
 
@@ -74,12 +84,25 @@ func (u *authUsecase) Register(email, username, password string) error {
 	user := &domain.User{
 		ID:           uuid.New(),
 		Email:        email,
-		Username:	  username,
+		Username:     username,
 		PasswordHash: hash_password,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
-	return u.repo.CreateUser(user)
+	if err := u.repo.CreateUser(user); err != nil {
+		return err
+	}
+	event := domain.UserRegisterEvent{
+		UserID:   user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+	}
+	err = u.kafkaProducer.PublishUserRegister(event)
+	if err != nil {
+		log.Println("Failed to publish Kafka event:", err)
+		return err
+	}
+	return u.kafkaProducer.PublishUserRegister(event)
 }
 
 func (u *authUsecase) GetJWKS() ([]byte, error) {

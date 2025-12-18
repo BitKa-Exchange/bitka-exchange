@@ -1,33 +1,24 @@
 package main
 
 import (
-	"log"
-	"os"
-
 	"bitka/pkg/config"
-	"bitka/pkg/logger"
 	"bitka/services/account/internal/app"
+
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	logger.Init()
+	// 1. Load Configuration
+	// We pass "ACCOUNT_DB_NAME" to look for that specific env var override
 	cfg := config.Load("ACCOUNT_DB_NAME")
 
 	// Override DB Name for Account Service if not set in env specific to service
-	if os.Getenv("DB_NAME") == "" {
-		cfg.DBName = "bitka_account"
-	}
-
+	cfg.DBName = config.GetEnv("DB_NAME", "bitka_account")
 	server, err := app.NewServer(cfg)
 	if err != nil {
-		log.Fatalf("Failed init: %v", err)
+		log.Fatal().Err(err).Msg("Failed to initialize server")
 	}
 
-	port := os.Getenv("HTTP_PORT")
-	if port == "" {
-		port = "3001"
-	}
-
-	log.Printf("Starting Account Service on :%s", port)
-	server.Listen(":" + port)
+	log.Printf("Starting Account Service on :%s", cfg.HTTPPort)
+	server.Listen(":" + cfg.HTTPPort)
 }

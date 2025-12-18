@@ -55,14 +55,9 @@ const config: Config = {
         },
         items: [
           {
-            label: "Bitka API",
+            label: "Dev Guides",
             position: "left",
-            to: "/docs/category/bitka",
-          },
-          {
-            label: "Auditor notes",
-            position: "left",
-            to: "/docs/audit/threat-model",
+            to: "/docs/developer-guide",
           },
           {
             type: "doc",
@@ -71,6 +66,11 @@ const config: Config = {
             label: "Docs Tutorial",
           },
           { to: "/blog", label: "Blog", position: "left" },
+          {
+            label: "Bitka API",
+            position: "left",
+            to: "/docs/openapi",
+          },
           {
             href: "https://github.com/Bitka-Exchange/bitka-exchange",
             label: "GitHub",
@@ -185,7 +185,7 @@ const config: Config = {
         config: {
           petstore: {
             specPath: "../docs/api/openapi/openapi.yaml",
-            outputDir: "docs/bitka",
+            outputDir: "docs/openapi",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",

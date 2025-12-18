@@ -1,0 +1,41 @@
+name: bitka-exchange CI/CD
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      
+      - name: login dockerhub
+        run: echo ${{secrets.DOCKER_PAT}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
+
+      - name: Build auth-service
+        run: docker build --build-arg SERVICE=auth -t ${{secrets.DOCKER_USERNAME}}/bitka-auth-service:latest -f services/Dockerfile.auth .
+
+      - name: Push auth-service to Dockerhub
+        run: docker push ${{secrets.DOCKER_USERNAME}}/bitka-auth-service:latest
+
+      # - name: Build account-service
+      #   run: docker build --build-arg SERVICE=account -t ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest -f services/Dockerfile.account .
+
+      # - name: Push account-service to Dockerhub
+      #   run: docker push ${{secrets.DOCKER_USERNAME}}/bitka-account-service:latest
+      
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull Images
+        run: docker pull ${{secrets.DOCKER_USERNAME}}/bitka-auth-service:latest
+
+      - name: Deploy Services
+        run: |
+          cd /home/deploy/bitka-exchange
+          docker compose pull
+          docker compose up -d
