@@ -1,7 +1,7 @@
 ## BitKa Threat Model
 
 * **Application Version:** 28/11/2025 
-* **Description:** A microservice-based digital wallet and trading that provides secure custodial account management, real-time market data access, and a verifiable off-chain ledger. The platform enables users to register and authenticate, manage profiles, deposit tokens, transfer funds, place trade orders, and initiate withdrawals signed by custody-controlled keys. It incorporates durable asynchronous processing for transactional correctness, integrates with Mailgun and GCS, authenticates internal services through a layered trust model, and maintains operational readiness through CI/CD and comprehensive audit logs.
+* **Description:** A microservice-based digital wallet and trading platform that provides secure custodial account management, real-time market data access, and a verifiable off-chain ledger. The platform enables users to register and authenticate, manage profiles, deposit tokens, transfer funds, place trade orders, and initiate withdrawals signed by custody-controlled keys. It incorporates durable asynchronous processing for transactional correctness, integrates with Mailgun and GCS, authenticates internal services through a layered trust model, and maintains operational readiness through CI/CD and comprehensive audit logs.
 * **Document Owner:** Thanisara Satalalai 
 
 ---
