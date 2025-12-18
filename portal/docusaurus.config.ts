@@ -40,141 +40,145 @@ const config: Config = {
     ],
   ],
 
-  themeConfig:
-    {
-      docs: {
-        sidebar: {
-          hideable: true,
-        },
+  themeConfig: {
+    docs: {
+      sidebar: {
+        hideable: true,
       },
-      navbar: {
-        title: "BitKa Docs",
-        logo: {
-          alt: "Bitka Logo",
-          src: "img/logo.svg",
-        },
-        items: [
-          {
-            label: "Dev Guides",
-            position: "left",
-            to: "/docs/developer-guide",
-          },
-          {
-            type: "doc",
-            docId: "intro",
-            position: "left",
-            label: "Docs Tutorial",
-          },
-          { to: "/blog", label: "Blog", position: "left" },
-          {
-            label: "Bitka API",
-            position: "left",
-            to: "/docs/openapi",
-          },
-          {
-            href: "https://github.com/Bitka-Exchange/bitka-exchange",
-            label: "GitHub",
-            position: "right",
-          },
-        ],
+    },
+    navbar: {
+      title: "BitKa Docs",
+      logo: {
+        alt: "Bitka Logo",
+        src: "img/logo.svg",
       },
-      footer: {
-        style: "dark",
-        links: [
-          {
-            title: "Docs",
-            items: [
-              {
-                label: "Tutorial",
-                to: "/docs/intro",
-              },
-            ],
-          },
-          {
-            title: "Community",
-            items: [
-              {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
-              },
-              {
-                label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
-              },
-              {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
-              },
-            ],
-          },
-          {
-            title: "More",
-            items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
-                label: "GitHub",
-                href: "https://github.com/facebook/docusaurus",
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-      },
-      prism: {
-        additionalLanguages: [
-          "ruby",
-          "csharp",
-          "php",
-          "java",
-          "powershell",
-          "json",
-          "bash",
-          "dart",
-          "objectivec",
-          "r",
-        ],
-      },
-      languageTabs: [
+      items: [
         {
-          highlight: "dart",
-          language: "dart",
-          logoClass: "dart",
+          label: "Dev Guides",
+          position: "left",
+          to: "/docs/developer-guide",
         },
         {
-          highlight: "javascript",
-          language: "nodejs",
-          logoClass: "nodejs",
+          label: "Bitka API",
+          position: "left",
+          to: "/docs/openapi",
         },
         {
-          highlight: "python",
-          language: "python",
-          logoClass: "python",
+         label: "Audit Reports",
+         position: "left",
+         to: "/docs/audit/threat-model", 
         },
         {
-          highlight: "go",
-          language: "go",
-          logoClass: "go",
+          type: "doc",
+          docId: "intro",
+          position: "left",
+          label: "Docs Tutorial",
         },
+        { to: "/blog", label: "Blog", position: "left" },
         {
-          highlight: "bash",
-          language: "curl",
-          logoClass: "curl",
-        },
-        {
-          highlight: "powershell",
-          language: "powershell",
-          logoClass: "powershell",
-        },
-        {
-          highlight: "rust",
-          language: "rust",
-          logoClass: "rust",
+          href: "https://github.com/Bitka-Exchange/bitka-exchange",
+          label: "GitHub",
+          position: "right",
         },
       ],
-    } satisfies Preset.ThemeConfig,
+    },
+    footer: {
+      style: "dark",
+      links: [
+        {
+          title: "Docs",
+          items: [
+            {
+              label: "Tutorial",
+              to: "/docs/intro",
+            },
+          ],
+        },
+        {
+          title: "Community",
+          items: [
+            {
+              label: "Stack Overflow",
+              href: "https://stackoverflow.com/questions/tagged/docusaurus",
+            },
+            {
+              label: "Discord",
+              href: "https://discordapp.com/invite/docusaurus",
+            },
+            {
+              label: "Twitter",
+              href: "https://twitter.com/docusaurus",
+            },
+          ],
+        },
+        {
+          title: "More",
+          items: [
+            {
+              label: "Blog",
+              to: "/blog",
+            },
+            {
+              label: "GitHub",
+              href: "https://github.com/facebook/docusaurus",
+            },
+          ],
+        },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+    },
+    prism: {
+      additionalLanguages: [
+        "ruby",
+        "csharp",
+        "php",
+        "java",
+        "powershell",
+        "json",
+        "bash",
+        "dart",
+        "objectivec",
+        "r",
+      ],
+    },
+    languageTabs: [
+      {
+        highlight: "dart",
+        language: "dart",
+        logoClass: "dart",
+      },
+      {
+        highlight: "javascript",
+        language: "nodejs",
+        logoClass: "nodejs",
+      },
+      {
+        highlight: "python",
+        language: "python",
+        logoClass: "python",
+      },
+      {
+        highlight: "go",
+        language: "go",
+        logoClass: "go",
+      },
+      {
+        highlight: "bash",
+        language: "curl",
+        logoClass: "curl",
+      },
+      {
+        highlight: "powershell",
+        language: "powershell",
+        logoClass: "powershell",
+      },
+      {
+        highlight: "rust",
+        language: "rust",
+        logoClass: "rust",
+      },
+    ],
+  } satisfies Preset.ThemeConfig,
 
   plugins: [
     [
