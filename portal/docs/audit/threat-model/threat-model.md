@@ -1,7 +1,7 @@
 ## BitKa Threat Model
 
 * **Application Version:** 28/11/2025 
-* **Description:** A microservice-based digital wallet and trading backend that provides secure custodial account management, real-time market data access, and a verifiable off-chain ledger. The platform enables users to register and authenticate, manage profiles, deposit tokens, transfer funds, place trade orders, and initiate withdrawals signed by custody-controlled keys. It incorporates durable asynchronous processing for transactional correctness, integrates with Mailgun and Cloudflare R2/GCS, authenticates internal services through a layered trust model, and maintains operational readiness through CI/CD and comprehensive audit logs.
+* **Description:** A microservice-based digital wallet and trading that provides secure custodial account management, real-time market data access, and a verifiable off-chain ledger. The platform enables users to register and authenticate, manage profiles, deposit tokens, transfer funds, place trade orders, and initiate withdrawals signed by custody-controlled keys. It incorporates durable asynchronous processing for transactional correctness, integrates with Mailgun and GCS, authenticates internal services through a layered trust model, and maintains operational readiness through CI/CD and comprehensive audit logs.
 * **Document Owner:** Thanisara Satalalai 
 
 ---
@@ -13,7 +13,7 @@ External dependencies are items outside of the application code.
 | ID | Description |
 | :--- | :--- |
 | 1 | Bitka and its database on premise instance is running on a Linux server running Ubuntu. |
-| 2 | Bitka and its database on cloud instance is running on a Google Cloud Platform. |
+| 2 | Bitka and its database on cloud instance is running on a Google Compute Engine on Google Cloud Platform. |
 | 3 | BitKa's cloud storage is on Google Cloud Storage. |
 | 4 | MailGun is used to send out notifications to users. |
 
