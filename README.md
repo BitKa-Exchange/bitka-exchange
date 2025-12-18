@@ -82,7 +82,7 @@ bitka/
 │   ├── order/            # Order Management System
 │   ├── matching/         # Order Matching Engine
 │   └── market/           # Market Data Aggregation
-├── compose.yml    # Local development stack
+├── compose.yml           # Local development stack
 ├── Makefile              # Build & Run commands
 └── go.work               # Go Workspace configuration
 
@@ -138,9 +138,9 @@ Currently, we are interested in [Testcontainer](https://www.testcontainers.org/)
 
 ## 🤝 Contributing
 
-We welcome contributions from students and anyone who want to learn together! Because this project purpose is mainly for creating environment for learning and research in each person's area of interest, and combine every work to build a complete system. 
+We welcome contributions from students and anyone who want to learn together! Because this project purpose is mainly for creating environment for learning and research in each person's area of interest, and combine everyone's work to build a complete system. 
 
 Right now, we don't have a formal contribution guide yet, only some developer guidelines at [Docs](https://docs.bitka.polishstack.com/docs/developer-guide). If you want to contribute, feel free to open issues or pull requests.
 
 > [!NOTE]
-> I also encourage you to reach out to me directly first if you want the experience of team collaboration. - @14two-77
+> I also encourage you to reach out to me directly first if you want the experience of team collaboration - [@14two-77](https://github.com/14two-77)
