@@ -1,0 +1,37 @@
+services:
+  auth-service:
+    container_name: bitka-auth
+    build:
+      context: ../../../
+      dockerfile: services/auth/Dockerfile
+      args:
+        SERVICE_NAME: auth
+    restart: on-failure
+    env_file:
+      - ../../../.env
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      SERVICE_NAME: auth
+      DB_HOST: postgres
+      DB_NAME: ${AUTH_DB_NAME}
+      HTTP_PORT: 3000
+      KAFKA_BROKER: kafka:29092
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=PathPrefix(`/v1/auth`)"
+      - "traefik.http.routers.auth.entrypoints=web"
+      - "traefik.http.routers.auth.middlewares=cors-headers"
+    networks:
+      - bitka-net
+    expose:
+      - "3000"
+
+networks:
+  bitka-net:
+    driver: bridge
