@@ -1,0 +1,10 @@
+name: bitka 
+
+include:
+  - deploy/docker/infra.yml
+  - deploy/docker/services/auth.yml
+  - deploy/docker/services/account.yml
+
+networks:
+  bitka-net:
+    driver: bridge

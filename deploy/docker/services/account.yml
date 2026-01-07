@@ -1,0 +1,40 @@
+services:
+  account-service:
+    container_name: bitka-account
+    build:
+      context: ../../../
+      dockerfile: services/account/Dockerfile
+      args:
+        SERVICE_NAME: account
+    restart: on-failure
+    env_file:
+      - ../../../.env
+    environment:
+      APP_ENV: production
+      SERVICE_NAME: account
+      LOG_LEVEL: DEBUG
+      DB_HOST: postgres
+      DB_NAME: ${ACCOUNT_DB_NAME}
+      HTTP_PORT: 3000
+      AUTH_JWKS_URL: http://auth-service:3000/v1/.well-known/jwks.json
+      KAFKA_BROKER: kafka:29092
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      kafka:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.account.rule=PathPrefix(`/v1/users`)"
+      - "traefik.http.routers.account.entrypoints=web"
+      - "traefik.http.routers.account.middlewares=cors-headers"
+    networks:
+      - bitka-net
+    expose:
+      - "3000"
+
+networks:
+  bitka-net:
+    driver: bridge
